@@ -1,0 +1,30 @@
+<h5>Room features</h5>
+<ul>Nice room</ul>
+<ul>Nice bathroom</ul>
+<ul>Nice bed</ul>
+<h5>Amenities</h5>
+<ul>Fitness center</ul>
+<ul>Pool</ul>
+<ul>WiFi</ul>
+
+<h5>Building</h5>
+<ul>Parking</ul>
+<ul>Nice lobby</ul>
+<ul>Nice location</ul>
+
+<h5>Service</h5>
+<ul>Helpful staff</ul>
+<ul>Good service</ul>
+<ul>Room service</ul>
+<ul>Bar</ul>
+<ul>Breakfast</ul>
+
+
+<script>
+		$('.choices ul').on('click',function()
+			{var newitem=$(this).html();
+			var itemslot=$(this).closest('.choices');
+				itemslot.siblings('.item').html(newitem).attr('style','');
+				$(this).closest('li').toggleClass('expanded')
+				});
+</script>
