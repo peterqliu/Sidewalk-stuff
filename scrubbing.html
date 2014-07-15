@@ -1,0 +1,40 @@
+<html>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <style>
+  .scrubber {
+  font-size:5em;
+  cursor:pointer;
+  -webkit-transition:all 0.2s;
+  -webkit-user-select: none;
+  cursor:ew-resize;
+  text-align:center;
+  }
+
+  .scrubber:active {
+  font-size:6em;
+  color:orange;
+  }
+  </style>
+<body>
+<div class='scrubber' style=''>$300</div> dorrars
+</body>
+<script>
+  window.isDown='false';
+  var currentval=30;
+  var minprice=0;
+  var maxprice=300;
+  $('.scrubber').on('mousedown',function(e)
+    {isDown=true; var x=e.pageX;
+      $('body').mousemove(function(e)
+        {window.xdrag=Math.round((e.pageX-x));
+        if (isDown && xdrag%1==0 && currentval+xdrag>minprice && currentval+xdrag<maxprice)
+          { currentval=currentval+xdrag;
+          $('.scrubber').text('$'+currentval+'0');}
+        }     
+      )
+    }
+  );
+  
+  $('body').mouseup(function(){isDown=false;})
+</script>
+</html>

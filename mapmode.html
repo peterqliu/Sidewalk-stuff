@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8"> 
+
+<head>
+  <script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.css' rel='stylesheet' />
+		<style type="text/css"> 
+		
+			@font-face {
+			  font-family: 'Lato';
+			  font-style: normal;
+			  font-weight: 400;
+			  src: local('Lato Regular'), local('Lato-Regular'), url(http://themes.googleusercontent.com/static/fonts/lato/v7/qIIYRU-oROkIk8vfvxw6QvesZW2xOQ-xsNqO47m55DA.woff) format('woff');
+			}
+			@font-face {
+			  font-family: 'Lato';
+			  font-style: normal;
+			  font-weight: 700;
+			  src: local('Lato Bold'), local('Lato-Bold'), url(http://themes.googleusercontent.com/static/fonts/lato/v7/qdgUG4U09HnJwhYI-uK18wLUuEpTyoUstqEm5AMlJo4.woff) format('woff');
+			}		
+			
+			body,html {
+				margin:0 auto;
+				background:#ccc;
+				font-family: Lato, sans-serif;
+				height:100%;
+				-webkit-perspective: 1200;
+			}
+			.listing {
+				background: #FEFEFE;
+				border: 2px solid #FAFAFA;
+				box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+				margin: 0 2px 15px;
+				-webkit-column-break-inside: avoid;
+				-moz-column-break-inside: avoid;
+				column-break-inside: avoid;
+				opacity: 1;
+			}
+			
+			.listing img {
+				width:100%;
+			}
+			
+			#maindialog {
+				width:350px;
+				float:left;
+				background:white;
+				margin:10px;
+				position:fixed;
+				padding:10px;
+				border:1px solid #ccc;
+				-webkit-transition:all 0.25s;
+			}
+			
+			#sortable {
+				padding:0px;
+				counter-reset: listcounter;
+			}
+			
+			#sortable li {
+				list-style: none;
+				background: #fafafa;
+				margin: 5px;
+				padding: 5px;
+				cursor: move;
+				overflow: hidden;
+				box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+			}
+			
+			#sortable li:before {
+				content: counter(listcounter);
+				counter-increment: listcounter;
+				margin: 0px 15px 0px -5px;				
+				color:white;
+				background:#999;
+				padding: 9px 8px;
+			}			
+			
+			.edit {
+			float:right;
+			cursor:pointer;			
+			color: #1C94C4;
+			font-size:0.8em;
+			line-height: 1.8em;
+			}
+			
+			.sortable-ghost {
+				opacity:0.5;
+			}
+			
+			
+			.choices {
+				-webkit-transition:max-height 0.5s;
+				cursor:pointer;
+				font-size:0.8em;
+				color:#666;
+				margin:0px -5px;
+				max-height:0px;
+				overflow:hidden;
+				background:#eee;
+			}
+			
+			.expanded .choices {
+				margin:-5px;
+				max-height:400px;
+				border-top:0px dotted grey;
+				padding:10px;
+				margin-top:9px;
+			}
+			
+			#sortable li.expanded {
+				display: list-item;
+				height:auto;
+			}			
+
+			.choices ul {
+				padding-right:3px;
+				padding-left:0px;
+				display:inline-block;
+				text-decoration:underline;
+				color:#1C94C4;
+			}
+			
+			.choices ul:hover {
+				color:orange;
+			}
+	
+			
+			h4 {
+				margin-bottom:10px;
+				color:#333;
+				font-size:1.2em;
+			}
+			h5 {
+				margin-bottom:2px;
+			}		
+								
+			#board{
+				-webkit-column-count: 3;
+				-webkit-column-gap: 10px;
+				-webkit-column-fill: auto;
+				-moz-column-count: 3;
+				-moz-column-gap: 10px;
+				-moz-column-fill: auto;
+				column-count: 3;
+				column-gap: 15px;
+				column-fill: auto;
+				width:70%;
+				padding:10px;
+				position:absolute;
+				right:0px;
+			}
+			
+			#map {
+				position:absolute;
+				width:100%;
+				height:100%;	
+				background:#abcdef;
+				-webkit-transition:all 0.25s;
+			}
+			.leaflet-control-attribution {
+				display:none;
+			}
+
+			.leaflet-marker-icon {
+				padding-left:6px;
+				}			
+			.leaflet-marker-icon img {
+				border-radius:50%;
+				width:40px;
+				height:40px;
+				-webkit-transition:all 0.1s;
+				margin-left:-20px;
+				margin-top:-20px;
+				background:grey;
+				box-shadow: 0 1px 2px rgba(34, 25, 25, 0.75);
+
+			}
+
+			#map .leaflet-marker-icon:hover img {
+				width:200px;
+				height:200px;	
+				margin-left:-100px;
+				margin-top:-100px;				
+			}
+			
+			#map .leaflet-marker-icon:active img {
+				box-shadow: 0 10px 20px rgba(34, 25, 25, 1);
+			}		
+			
+			.markertitle {
+				text-align:center;
+				background-image:url('assets/listingtitlebg.png');
+				padding:5px;
+				width:200px;
+				margin-left:-100px;
+				position:absolute;
+				height:57px;
+				color:white;
+				opacity:0;
+				pointer-events: none;	
+				font-size:1.5em;
+			}
+			
+			#map .leaflet-marker-icon:hover .markertitle {
+				opacity:1;
+				margin-top:-62px;				
+				-webkit-transition:all .1s;
+				pointer-events: none;				
+			}
+			.leaflet-popup-close-button {
+				display:none;
+			}
+			#detailview {
+				margin:5% 10%;
+				width:80%;
+				position:absolute;
+				z-index:2;
+				background:white;
+				-webkit-transform:translateY(-3000px);
+				transition:all 0.4s;
+				height:80%;
+				box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+				transition-timing-functio: cubic-bezier(0,1.65,.65,1);
+			}		
+
+			.open#detailview {
+				-webkit-transform:translateY(0px);
+			}
+			
+			.open ~ div {
+				-webkit-filter: blur(30px) brightness(90%);
+				pointer-events: none;
+			}
+			
+			#detailedmap {
+				float:right;
+				width:30%;
+				background:#eee;
+				margin-left:2%;
+				height:100%;
+				border-left:1px solid #ccc;
+			}
+			
+			#detailedmap .leaflet-popup-pane {
+				margin-top:-20px;
+			}
+			
+			#bedbath {
+				text-transform: uppercase;
+			}
+			
+			#gallery {
+				overflow:scroll;
+				display:inline-block;
+				white-space: nowrap;
+				width:100%;
+				background:#333;
+				cursor:ew-resize;
+			}
+			
+			.galleryimg {
+				display:inline;
+				vertical-align: middle;
+			}
+		</style>
+		
+</head>
+	<body>
+		<div id='detailview'>
+			<div id='detailedmap'></div>
+
+				<div style='width:65%;overflow:scroll;padding-left:20px;height:100%;'>
+					<h2 id='listingtitle'></h2>
+					<p><span id='bedbath'></span><span id='price'></span><span id='dateposted'></span></p>
+					<div id='gallery'></div>
+					<p id='listingbody'></p>
+				</div>
+				<button onclick='toggledetailview()'>close</button>
+				<a id='contact'>Contact</a>
+				<a id='listinglink'>Original listing</a>
+				
+
+		</div>
+	    <div id='map'></div>
+		<div id='maindialog'>
+		Rank priorities
+		<ul id="sortable">
+			Must-haves:
+		    <li><span class='item'>Good room</span></li>
+		    <li><span class='item'>Good room</span></li>
+		    Nice-to-haves:
+		    <li><span class='item'>Good room</span></li>
+		    <li><span class='item'>Good room</span></li>
+		    <li><span class='item'>Good room</span></li>
+		    <li><span class='item'>Good room</span></li>  
+		</ul>
+
+	</div>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src='http://rubaxa.github.io/Sortable/Sortable.min.js'></script>
+
+		<script type="text/javascript">
+		
+			
+			//initialize map
+			var map=L.mapbox.map('map', 'examples.map-h67hf2ic', {
+			    scrollWheelZoom: true
+			}).setView([37.7484,-122.4156], 14);
+
+			new L.Control.Zoom({ position: 'topright' }).addTo(map);
+			var detailmap=L.mapbox.map('detailedmap', 'examples.map-h67hf2ic', {scrollWheelZoom: true,zoomControl:false});
+			
+			
+			//fetch data via 3taps
+			window.array;
+			var searchparameters= {auth_token: "358297d537d9b89bd5b5720bbe255c65", 	
+				//anchor:1137032940,
+				rpp:'99',
+				retvals:'heading,id,images,price,annotations,external_url,location,timestamp',
+				 category:"RHFR",
+				 source:'CRAIG',
+				 radius:'5mi',
+				 //heading:'san francisco',
+				 lat: 37.7484,
+				 long: -122.4156,
+				 //price:'5000..6000'
+				}
+			
+		    function dosearch()
+				{$.get( "http://search.3taps.com", searchparameters)
+				
+				.done(function(data) {
+				console.log('done fetching');
+				array=data.postings;
+				
+					
+				//Place markers on map	
+				for (var k=0;k<array.length;k++)
+					{var lat=array[k]['location']['lat']; 
+					var lon=array[k]['location']['long'];
+					
+					//set default picture if listing doesn't have one
+					if (array[k]['images'][0] !== undefined && array[k]['images'][0]['full'] !== undefined) {var image=array[k]['images'][0]['full']} 
+					else {var image= 'http://www.peterma.de/secretrio/assets/selfie1.jpg'};
+						
+					var myIcon=L.divIcon({className: 'leaflet-marker-icon',html: '<img src="'+image+'"><div class="markertitle">'+array[k]['annotations']['bedrooms']+'<br>$'+array[k]['price']+'</div>'});		
+						L.marker([lat,lon],{icon: myIcon,riseOnHover:'true',listingindex:k })
+							.bindPopup('<a>'+k+'</a>')
+							.addTo(map)
+							.on('click',function(e){toggledetailview(); populatelisting(e['target']['_popup']['_contentNode']['innerText'])})
+					}
+				})};		    
+			dosearch();
+			
+			//open and close detail window
+			function toggledetailview(){$("#detailview").toggleClass("open")};
+			
+			//fetch HTML body text
+			function fetchdetail(id){$.get( "http://search.3taps.com", 
+				{auth_token: "358297d537d9b89bd5b5720bbe255c65",id:id,retvals:'html'})
+				.done(function(data) 
+					{var html=atob(data.postings[0]['html']);
+					var postingbody=html.substring(html.lastIndexOf('<section id="postingbody">')+26,html.lastIndexOf('<ul class="notices">'));
+					$('#listingbody').html(postingbody);	
+					}
+				)};
+			
+			//when user clicks on marker, populates detail view with appropriate heading and body
+			function populatelisting(e)
+				{var listing=array[e];
+				$('#listingtitle').text('$'+listing['price']+' '+listing['heading']);
+				//$('#listingbody').text(listing['body']);
+				fetchdetail(listing['id']);
+				
+				//calculate elapsed time
+				var currenttime=(new Date().getTime())/1000;
+				var postingtime=listing['annotations']['original_posting_date'];
+				var difference=currenttime-postingtime;
+				console.log('current time is '+currenttime+', posting time was '+postingtime+', with a differential of '+difference+' seconds');
+				if(difference<3600){$('#dateposted').text(Math.round(difference/60)+' minutes ago')}
+				else {if(difference<62400) {$('#dateposted').text(Math.round(difference/3600)+' hours ago')}
+					else {$('#dateposted').text(Math.round(difference/86400)+' days ago')}
+				}
+				//console.log(hours+' hours since this listing was posted');
+				
+				//insert pictures
+				$('#gallery').text('');
+				for(var m=0;m<listing['images'].length;m++)
+					{$('#gallery').append("<img class='galleryimg' src='"+listing['images'][m]['full']+"'>")}
+
+				//update Contact and Listing buttons
+				$('#listinglink').attr('href',listing['external_url']);
+					//center detail map to listing location								
+					var lat=listing['location']['lat']; 
+					var lon=listing['location']['long'];
+				
+				//populate bed/bath, price
+				
+				$('#bedbath').text(listing['annotations']['bedrooms']+', '+listing['annotations']['bathrooms']+' in '+listing['annotations']['source_neighborhood']);
+				
+				//remove old marker, reset view on new listing, insert new marker at location with tooltip containing intersection (via geonames API call)
+				$('#detailedmap .leaflet-marker-icon').remove();
+				detailmap.setView([lat,lon], 17);
+				$.ajax({ url: 'http://api.geonames.org/findNearestIntersectionJSON?lat='+lat+'&lng='+lon+'&username=peterqliu', 
+					success: function(data) { 
+						L.marker([lat,lon],{icon: L.divIcon({className: 'leaflet-marker-icon',html: '<img src="http://www.peterma.de/secretrio/assets/selfie1.jpg">'})})
+						.bindPopup('<b>'+data['intersection']['street1']+' at '+data['intersection']['street2']+'</b>',{closeButton:'false'})
+						.addTo(detailmap)
+						.openPopup();
+					}
+				})			
+				}
+					
+					
+			//initalize sort list
+			new Sortable(sortable);
+			
+			
+		//maindialog functionality
+
+		$('li')
+			.append(' <span class="edit">edit</span>')
+			.append('<div class="choices"></div>');
+			
+		$('.choices').load('choices.html');
+				
+		$('.edit')
+			.on('click',function()
+				{//$(this).siblings('.choices').toggleClass('expanded');
+				$(this).closest('li').toggleClass('expanded');
+				});
+			
+		function add() {
+			$('.additional').show();
+			$('#add').remove();
+		}
+		</script>
+
+
+	</body>
+</html>
