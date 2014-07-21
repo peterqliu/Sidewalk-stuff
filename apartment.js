@@ -23,7 +23,9 @@
 				 //heading:'san francisco',
 				 lat: latitude,
 				 long: longitude,
-				 price:''
+				 price:'200..3000',
+				 has_image:1,
+				 has_price:1,
 				};
 			
 			//search with typed input
@@ -108,15 +110,27 @@
 			function toggledetailview(){$("#detailview").toggleClass("open")};
 			
 			//fetch heading, timestamp, HTML body text
-			function fetchdetail(id){$.get( "http://search.3taps.com", 
+			function fetchdetail(id,phone,email){$.get( "http://search.3taps.com", 
 				{auth_token: "358297d537d9b89bd5b5720bbe255c65",id:id,retvals:'html,heading,timestamp,external_url,price'})
 				.done(function(data) 
 					{var html=atob(data.postings[0]['html']);
 					var postingbody=html.substring(html.lastIndexOf('<section id="postingbody">')+26,html.lastIndexOf('<ul class="notices">'));
-					
+					postingbody=postingbody.replace(/â¢/g,'• ');
 					$('#listingtitle').text('$'+data.postings[0]['price']+' '+data.postings[0]['heading']);
 					$('#listingbody').html(postingbody);
-					
+
+					//Inject phone number into "show info"
+					var formattedphone=function(i, phone) {
+				        phone = phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+				        return phone;
+    				}
+					d3.selectAll('.showcontact').text(phone);
+
+					$(".showcontact").text(function(i, text) {
+				        text = text.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+				        return text;
+    				});
+
 					//update Contact and Listing buttons
 					$('#listinglink').attr('href',data.postings[0]['external_url']);
 	
@@ -126,8 +140,9 @@
 			//when user clicks on marker, populates detail view with appropriate heading and body
 			function populatelisting(e)
 				{var listing=array[e];
-				//$('#listingbody').text(listing['body']);
-				fetchdetail(listing['id']);
+				fetchdetail(listing['id'],listing['annotations']['phone']);
+
+				
 				
 				//calculate elapsed time since posting date
 				var currenttime=(new Date().getTime())/1000;
@@ -140,7 +155,6 @@
 				else {if(difference<62400) {$('#dateposted').text(Math.round(difference/3600)+' hours ago')}
 					else {$('#dateposted').text(Math.round(difference/86400)+' days ago')}
 				}
-				//console.log(hours+' hours since this listing was posted');
 				
 				//insert pictures
 				$('#gallery').text('');
@@ -173,7 +187,7 @@
 
 			function drawcircle()
 				{drawing='true';
-
+				$('#map').toggleClass('drawmode');
 					//remove existing circles
 					$('path.leaflet-clickable').remove();
 					
@@ -198,18 +212,35 @@
 						.attr('cx',circlecenter[0])
 						.attr('cy',circlecenter[1])
 						.attr('r',0);
-						
+
+						d3.select('#radius')
+							.attr('opacity',0);
+
 						$('#map').mousemove(function(e)
 							{ if(drawing=='true' && e.which==1)
 								{var radius=Math.pow(Math.pow(e.pageX-circlecenter[0],2)+Math.pow(e.pageY-circlecenter[1],2),0.5);
-								d3.select('#outer').attr('r', radius).attr('fill-opacity',Math.pow(0.9,(radius*0.1)));
+								
+								d3.select('#outer')
+									.attr('r', radius)
+									.attr('fill-opacity',Math.pow(0.9,(radius*0.1)));
+								
+								d3.select('#radius')
+									.attr('opacity',1)
+									.attr('x2',e.pageX)
+									.attr('y2',e.pageY)
+									.attr('x1',circlecenter[0])
+									.attr('y1',circlecenter[1]);
+
+								d3.select('#radiusdistance')
+									.attr('x',e.pageX)
+									.attr('y',e.pageY)			
 								}
 							}
 						)
 						})
 						map.on('mouseup',function(e)
 							{if (drawing=='true')
-								{
+								{$('#map').toggleClass('drawmode');
 								map.dragging.enable();
 								$('#circledraw').hide();
 								$('#map').unbind('mousedown');

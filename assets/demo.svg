@@ -1,0 +1,45 @@
+<svg>
+	<style>
+
+
+	
+	#radius {
+		-webkit-transform-origin:0%;	
+		-webkit-animation-name: stretcher;
+	}
+	
+	#grabber {
+		-webkit-transform-origin:0% 50%;	
+		-webkit-animation-name: move;
+		fill:white;
+	}
+	#outside, #radius,#grabber {
+		-webkit-animation-duration: 0.5s;
+		-webkit-animation-direction: alternate;
+		-webkit-animation-iteration-count: infinite;
+		stroke:white;
+
+}
+
+	/*Person marker */
+	@-webkit-keyframes pulse {
+	  0% {
+	  -webkit-transform:scale(0.5);
+	  }
+	}
+	@-webkit-keyframes stretcher {
+	  0% {
+	  -webkit-transform:scaleX(0.5);
+	  }
+	}  
+	@-webkit-keyframes move {
+	  0% {
+	  -webkit-transform:translateX(-14px);
+	  }	  
+}
+	</style>
+			<circle id='outside' cx='30' cy='30' r='25'/>
+			<circle id='grabber' cx='55' cy='30' r='5' />
+			<line id='radius' x1='30' y1='30' x2='55' y2='30' stroke-width='2' stroke='black'>
+
+</svg>

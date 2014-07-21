@@ -18,7 +18,7 @@
 					<p><span id='bedbath'></span><span id='price'></span><span id='dateposted'></span></p>
 					<div id='gallery'></div>
 					<p id='listingbody'></p>
-					<a onclick='toggledetailview()' style='padding:10px 15px; border:1px solid #ccc;cursor:pointer;'>close</a>
+					<a onclick='toggledetailview()' class='button'>Close</a>
 					<a id='contact'>Contact</a>
 					<a id='listinglink'target='_blank'>Original listing</a>
 				</div>
@@ -26,17 +26,72 @@
 				
 
 		</div>
-	    <div id='map'></div>
+	    <div id='map'>
+
+	    </div>
 	    <svg id='circledraw'>
 	    	<circle id='outer'/>
-			<circle id='center' r='5'>
+			<circle id='center' r='5'/>
+			<line id='radius'/>
+			<text id='radiusdistance'> Release to search</text>
 	    </svg>
+	    <div id='dialogmessage'>
+			<svg id='demo'>
+				<style>
+					svg {
+						width:60px;
+						height:60px;
+					}
+					#demo #outside {
+						fill:none;
+						-webkit-transform-origin:50%;		
+						-webkit-animation-name: pulse;	
+					}
+					
+					#demo #radius {
+						-webkit-transform-origin:0%;	
+						-webkit-animation-name: stretcher;
+					}
+					
+					#demo #grabber {
+						-webkit-transform-origin:0% 50%;	
+						-webkit-animation-name: move;
+						fill:white;
+					}
+					#demo #outside, #demo #radius, #demo #grabber {
+						-webkit-animation-duration: 0.5s;
+						-webkit-animation-direction: alternate;
+						-webkit-animation-iteration-count: infinite;
+						stroke:white;
+					}
+
+					/*Person marker */
+					@-webkit-keyframes pulse {
+					  0% {
+					  -webkit-transform:scale(0.5);
+					  }
+					}
+					@-webkit-keyframes stretcher {
+					  0% {
+					  -webkit-transform:scaleX(0.5);
+					  }
+					}  
+					@-webkit-keyframes move {
+					  0% {
+					  -webkit-transform:translateX(-14px);
+					  }	  }
+				</style>
+				<circle id='outside' cx='30' cy='30' r='25'/>
+				<circle id='grabber' cx='55' cy='30' r='5' />
+				<line id='radius' x1='30' y1='30' x2='55' y2='30' stroke-width='2' stroke='black'>
+			</svg>
+	    	Click and drag to expand circle</div>
 		<div id='maindialog'>
 
-		<input type='text' id='locationinput' placeholder='City or ZIP' value='san francisco' onkeydown="if (event.keyCode == 13) {inputsearch()}"/>
-		<a onclick='drawcircle()'>Draw circle region</a>
-		<div>
-		<span class='scrubber' id='minrent' style=''>$200</span> to <span class='scrubber' id='maxrent' style=''>$3000</span>
+			<input type='text' id='locationinput' placeholder='City or ZIP' value='san francisco' onkeydown="if (event.keyCode == 13) {inputsearch()}"/>
+			<a onclick='drawcircle()' class='button'>Draw circle region</a>
+			<div>
+			<span class='scrubber' id='minrent' style=''>$200</span> to <span class='scrubber' id='maxrent' style=''>$3000</span>
 		</div>
 	</div>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

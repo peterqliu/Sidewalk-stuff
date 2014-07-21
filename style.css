@@ -19,21 +19,9 @@
 				height:100%;
 				-webkit-perspective: 1200;
 			}
-			.listing {
-				background: #FEFEFE;
-				border: 2px solid #FAFAFA;
-				box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
-				margin: 0 2px 15px;
-				-webkit-column-break-inside: avoid;
-				-moz-column-break-inside: avoid;
-				column-break-inside: avoid;
-				opacity: 1;
-			}
 			
-			.listing img {
-				width:100%;
-			}
-			
+			/* Main dialog */
+
 			#maindialog {
 				width:350px;
 				float:left;
@@ -46,6 +34,11 @@
 				-webkit-user-select:none;
 			}
 			
+			.button {
+				padding:10px 15px; 
+				border:1px solid #ccc;
+				cursor:pointer;
+			}
 
 			.scrubber {
 				  font-size:2em;
@@ -68,29 +61,24 @@
 			h5 {
 				margin-bottom:2px;
 			}		
-								
-			#board{
-				-webkit-column-count: 3;
-				-webkit-column-gap: 10px;
-				-webkit-column-fill: auto;
-				-moz-column-count: 3;
-				-moz-column-gap: 10px;
-				-moz-column-fill: auto;
-				column-count: 3;
-				column-gap: 15px;
-				column-fill: auto;
-				width:70%;
-				padding:10px;
-				position:absolute;
-				right:0px;
-			}
-			
+		
+
+
+		/* Main map panel */
+
 			#map {
 				position:absolute;
 				width:100%;
 				height:100%;	
 				background:#abcdef;
 				-webkit-transition:all 0.25s;
+			}
+			.drawmode {
+				cursor:crosshair;
+			}
+
+			.drawmode .leaflet-marker-icon{
+				pointer-events:none;
 			}
 			.leaflet-map-pane {}
 			.leaflet-control-attribution {
@@ -99,8 +87,15 @@
 
 			.leaflet-marker-icon {
 				padding-left:6px;
-				}			
-				
+				}
+
+
+			.markerline {
+				border-left:3px solid orange;
+				height:60px;
+				margin-top:-20px;
+			}
+
 			.leaflet-marker-icon img {
 				border-radius:50%;
 				width:40px;
@@ -147,7 +142,23 @@
 				-webkit-transition:all .1s;
 				pointer-event: none;				
 			}
-			
+	
+
+			#dialogmessage {
+				position:absolute;
+				bottom:0px;
+				padding:20px;
+				background:grey;
+				color:white;
+				text-align:center;
+				display:none;
+			}
+
+			.drawmode ~ #dialogmessage{
+				display:block;
+			}		
+		/* Circle drawing */
+
 			#circledraw {
 				position:absolute;
 				display:none;
@@ -156,22 +167,39 @@
 			}
 			
 			#outer {
-				stroke-width:3px;
+				stroke-width:2px;
 				stroke:white;
 				fill:white;
+				stroke-opacity:0.5;
 			}
 			
+			#center {
+				fill:white;
+			}
+			#radius {
+				stroke:white;
+				stroke-opacity:1;
+				stroke-width:2px;				
+			}
+
+			#radiusdistance {
+				fill:white;
+			}
 			.leaflet-popup-close-button {
 				display:none;
 			}
 			path.leaflet-clickable {
 				fill:orange;
-				fill-opacity:0.1;
+				fill-opacity:0.05;
 				stroke:orange;
 				stroke-dasharray:1,10;
 				stroke-opacity:1;
 				stroke-width:3;
 			}
+
+
+		/* Detail view */
+
 			#detailview {
 				margi:5%;
 				width:100%;
@@ -195,8 +223,20 @@
 			}
 			
 			#listingbody {
-				color:#666;
+				color:#333;
 			}
+
+			.showcontact {
+				color:orange;
+				text-decoration: none;
+				pointer-events:none;
+			}
+
+			.showcontact:before {
+				content:'\260e ';
+				margin-right:5px;			
+			}
+
 			#detailedmap {
 				float:right;
 				width:30%;
