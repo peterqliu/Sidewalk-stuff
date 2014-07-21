@@ -3,11 +3,10 @@
   <style>
   .scrubber {
   font-size:5em;
-  cursor:pointer;
+  cursor:ew-resize;
   -webkit-transition:all 0.2s;
   -webkit-user-select: none;
-  cursor:ew-resize;
-  text-align:center;
+
   }
 
   .scrubber:active {
@@ -16,25 +15,50 @@
   }
   </style>
 <body>
-<div class='scrubber' style=''>$300</div> dorrars
+<br>
+<br>
+<span class='scrubber' id='minrent' style=''>$200</span>
+<br>
+<span class='scrubber' id='maxrent' style=''>$3000</span>
+
 </body>
 <script>
   window.isDown='false';
-  var currentval=30;
+  var currentmin=200;
+  var initialmin;
+  var currentmax=3000;
+  var initialmax;
+  
   var minprice=0;
-  var maxprice=300;
-  $('.scrubber').on('mousedown',function(e)
-    {isDown=true; var x=e.pageX;
+  var maxprice=10000;
+  
+  var minactive;
+  var maxactive;
+  
+  $('#minrent').on('mousedown',function(e)
+  {minactive=true; var initialx=e.pageX; initialmin=currentmin;
+		$('body').mousemove(function(e)
+	  	{window.xdrag=Math.round(e.pageX-initialx)*10;
+		if (minactive && xdrag%10==0 && initialmin+xdrag>minprice && initialmin+xdrag<currentmax)
+			{currentmin=initialmin+xdrag;
+			$('#minrent').text('$'+currentmin);}
+        }
+      )
+    }
+  );
+
+  $('#maxrent').on('mousedown',function(e)
+    {maxactive=true; var initialx=e.pageX; initialmax=currentmax;
+    	
       $('body').mousemove(function(e)
-        {window.xdrag=Math.round((e.pageX-x));
-        if (isDown && xdrag%1==0 && currentval+xdrag>minprice && currentval+xdrag<maxprice)
-          { currentval=currentval+xdrag;
-          $('.scrubber').text('$'+currentval+'0');}
+        {window.xdrag=Math.round(e.pageX-initialx)*10;
+        if (maxactive && xdrag%10==0 && initialmax+xdrag>currentmin && initialmax+xdrag<maxprice)
+        	{currentmax=initialmax+xdrag;
+        	$('#maxrent').text('$'+currentmax);}
         }     
       )
     }
   );
-  
-  $('body').mouseup(function(){isDown=false;})
+  $('body').on('mouseup mouseout', function(){minactive=false;maxactive=false})
 </script>
-</html>
+</html>	
