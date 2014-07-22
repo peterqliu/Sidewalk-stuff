@@ -38,12 +38,13 @@
 	    <div id='dialogmessage'>
 			<svg id='demo'>
 				<style>
-					svg {
-						width:60px;
-						height:60px;
+					#demo {
+						width:300px;
+						height:30px;
 					}
 					#demo #outside {
-						fill:none;
+						fill:white;
+						fill-opacity:0.3;
 						-webkit-transform-origin:50%;		
 						-webkit-animation-name: pulse;	
 					}
@@ -58,13 +59,18 @@
 						-webkit-animation-name: move;
 						fill:white;
 					}
-					#demo #outside, #demo #radius, #demo #grabber {
+					#demo #outside, #demo #radius, #demo #grabber, text {
 						-webkit-animation-duration: 0.5s;
 						-webkit-animation-direction: alternate;
 						-webkit-animation-iteration-count: infinite;
-						stroke:white;
+						fill:white;
 					}
-
+					
+					#cancel {
+						font-size:1.2em;
+						fill: orange;
+						cursor: pointer;
+					}
 					/*Person marker */
 					@-webkit-keyframes pulse {
 					  0% {
@@ -78,20 +84,25 @@
 					}  
 					@-webkit-keyframes move {
 					  0% {
-					  -webkit-transform:translateX(-14px);
+					  -webkit-transform:translateX(-7px);
 					  }	  }
 				</style>
-				<circle id='outside' cx='30' cy='30' r='25'/>
-				<circle id='grabber' cx='55' cy='30' r='5' />
-				<line id='radius' x1='30' y1='30' x2='55' y2='30' stroke-width='2' stroke='black'>
+				
+				<circle id='outside' cx='15' cy='15' r='14'/>
+				<circle id='grabber' cx='28' cy='15' r='2' />
+				<line id='radius' x1='15' y1='15' x2='28' y2='15' stroke-width='2'/>
+				<text x='40' y='21'> Click and drag to expand circle</text>
+				<text id='cancel' x='270' y='23' onclick="canceldraw()">✕</text>				
 			</svg>
-	    	Click and drag to expand circle</div>
+	    	</div>
 		<div id='maindialog'>
 
-			<input type='text' id='locationinput' placeholder='City or ZIP' value='san francisco' onkeydown="if (event.keyCode == 13) {inputsearch()}"/>
-			<a onclick='drawcircle()' class='button'>Draw circle region</a>
+			<input type='text' id='locationinput' placeholder='City or ZIP' value='Houston' onkeydown="if (event.keyCode == 13) {inputsearch()}"/>
+			<a onclick='drawcircle()' class='button'>Define area</a>
 			<div>
 			<span class='scrubber' id='minrent' style=''>$200</span> to <span class='scrubber' id='maxrent' style=''>$3000</span>
+			bedrooms
+			<br>
 		</div>
 	</div>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

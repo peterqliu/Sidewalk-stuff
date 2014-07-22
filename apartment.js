@@ -20,7 +20,6 @@
 				 category:"RHFR",
 				 source:'CRAIG',
 				 radius:'8000m',
-				 //heading:'san francisco',
 				 lat: latitude,
 				 long: longitude,
 				 price:'200..3000',
@@ -252,7 +251,12 @@
 							}
 						);
 				}		
-	
+			function canceldraw(){
+				$('#map').toggleClass('drawmode');
+				map.dragging.enable();
+				$('#circledraw').hide();
+				$('#map').unbind('mousedown');
+			}
 				//Price scrubber functionality
 				  var currentmin=200;
 				  var initialmin;
