@@ -1,7 +1,14 @@
-<svg>
+<svg id='demo'>
 	<style>
-
-
+	svg {
+		width:60px;
+		height:60px;
+	}
+	#outside {
+		fill:none;
+		-webkit-transform-origin:50%;		
+		-webkit-animation-name: pulse;	
+	}
 	
 	#radius {
 		-webkit-transform-origin:0%;	
@@ -13,7 +20,7 @@
 		-webkit-animation-name: move;
 		fill:white;
 	}
-	#outside, #radius,#grabber {
+	#outside, #radius, #grabber {
 		-webkit-animation-duration: 0.5s;
 		-webkit-animation-direction: alternate;
 		-webkit-animation-iteration-count: infinite;
