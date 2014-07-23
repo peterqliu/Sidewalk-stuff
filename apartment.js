@@ -196,7 +196,11 @@
 					map.on('mousedown', function(e) {
 						//console.log(e.containerPoint.toString() + ', ' + e.latlng.toString());	
 						window.centerlatlon=[e.latlng.lat,e.latlng.lng];
-								
+						map.on('mousemove',function(e)
+							{var mileradius= 0.000621371*(L.latLng(centerlatlon[0],centerlatlon[1]).distanceTo([e.latlng.lat,e.latlng.lng]));
+								d3.select('#radiusdistance')
+									.text(Math.round(mileradius*10)/10+' mi');
+						});			
 					});		
 							
 					$('#map').mousedown(function(e)
@@ -215,10 +219,15 @@
 						d3.select('#radius')
 							.attr('opacity',0);
 
+						d3.select('#radiusdistance')
+							.attr('x',circlecenter[0])
+							.attr('y',circlecenter[1])
+							.attr('font-size','2em')
+							.text('');		
+							
 						$('#map').mousemove(function(e)
 							{ if(drawing=='true' && e.which==1)
 								{var radius=Math.pow(Math.pow(e.pageX-circlecenter[0],2)+Math.pow(e.pageY-circlecenter[1],2),0.5);
-								
 								d3.select('#outer')
 									.attr('r', radius)
 									.attr('fill-opacity',Math.pow(0.9,(radius*0.1)));
@@ -230,32 +239,26 @@
 									.attr('x1',circlecenter[0])
 									.attr('y1',circlecenter[1]);
 
-								d3.select('#radiusdistance')
-									.attr('x',e.pageX)
-									.attr('y',e.pageY)			
+	
 								}
 							}
 						)
 						})
-						map.on('mouseup',function(e)
-							{if (drawing=='true')
-								{$('#map').toggleClass('drawmode');
-								map.dragging.enable();
-								$('#circledraw').hide();
-								$('#map').unbind('mousedown');
+						map.on('mouseup',function(e){if (drawing=='true')
+								{canceldraw();
 								var meterradius= L.latLng(centerlatlon[0],centerlatlon[1]).distanceTo([e.latlng.lat,e.latlng.lng]);
 								L.circle(centerlatlon, meterradius).addTo(map);
 								circlesearch(centerlatlon[0],centerlatlon[1],meterradius);
 								}
 								drawing='false';
-							}
-						);
+							})
 				}		
 			function canceldraw(){
 				$('#map').toggleClass('drawmode');
 				map.dragging.enable();
 				$('#circledraw').hide();
 				$('#map').unbind('mousedown');
+				$('#map').unbind('mousemove');
 			}
 				//Price scrubber functionality
 				  var currentmin=200;

@@ -188,6 +188,7 @@
 
 			#radiusdistance {
 				fill:white;
+				text-anchor:middle;
 			}
 			.leaflet-popup-close-button {
 				display:none;
