@@ -97,14 +97,15 @@
 	    	</div>
 		<div id='maindialog'>
 
-			<input type='text' id='locationinput' placeholder='City or ZIP' value='Houston' onkeydown="if (event.keyCode == 13) {inputsearch()}"/>
+			<input type='text' id='locationinput' placeholder='City or ZIP' value='San Francisco' onkeydown="if (event.keyCode == 13) {inputsearch()}"/>
 			<a onclick='drawcircle()' class='button'>Define area</a>
 			<div>
 			<span class='scrubber' id='minrent' style=''>$200</span> to <span class='scrubber' id='maxrent' style=''>$3000</span>
 			<br>
-			<img src='assets/cat.svg' class='button' height='30' width='30' title='Allows cats'/>
-			<img src='assets/dog.svg' class='button' height='30' title='Allows dogs'/>
-			<br>
+			<img src='assets/cat.svg' class='quarter button' height='30' width='30' title='Allows cats'/>
+			<img src='assets/dog.svg' class='button quarter' height='30' title='Allows dogs'/>
+			<img src='assets/cat.svg' class='button quarter' height='30' width='30' title='Allows cats'/>
+			<img src='assets/dog.svg' class='button quarter' height='30' title='Allows dogs'/>			
 		</div>
 	</div>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

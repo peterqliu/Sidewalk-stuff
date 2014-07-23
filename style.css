@@ -32,7 +32,9 @@
 				-webkit-transition:all 0.25s;
 				-webkit-user-select:none;
 			}
-			
+			.quarter {
+				width:15%;
+			}
 			.button {
 				padding:10px 15px; 
 				border:1px solid #ccc;

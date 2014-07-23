@@ -13,18 +13,19 @@
 			
 			//fetch data via 3taps
 			window.array;
-			window.searchparameters= {auth_token: "358297d537d9b89bd5b5720bbe255c65", 	
-				//anchor:1137032940,
+			window.searchparameters= {
+				auth_token: "358297d537d9b89bd5b5720bbe255c65", 	
 				rpp:'99',
 				retvals:'id,images,price,annotations,location,timestamp',
 				 category:"RHFR",
 				 source:'CRAIG',
-				 radius:'8000m',
+				 radius:'6000m',
 				 lat: latitude,
 				 long: longitude,
 				 price:'200..3000',
 				 has_image:1,
 				 has_price:1,
+				 annotations: '{(bedrooms:2br OR bedrooms:3br) AND dogs:yes}'
 				};
 			
 			//search with typed input
