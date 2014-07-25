@@ -1,10 +1,19 @@
-			$('.onoff').attr('onclick','$(this).toggleClass("on")');
+			$('.onoff')
+				.attr('onclick','$(this).toggleClass("on")')
+				.click(function(){toggleamenity($(this).attr('amenity'))});
+			//var cats=dogs=w_d_in_unit=garage=true;
+			cats=(cats=true) ? 'AND cats:yes':'';
+			var laundry='AND w_d_in_unit:yes';
+			
+			function toggleamenity(type)
+				{console.log(type)};
+			
 			
 			window.latitude=37.7484;
 			window.longitude=-122.4156;
 			
 			//initialize main map and detail map
-			var map=L.mapbox.map('map', 'peterqliu.j0nb49fm', {
+			var map=L.mapbox.map('map', 'vsco.map-hd230o83', {
 			    scrollWheelZoom: true, zoomControl:false
 			});
 
@@ -21,13 +30,13 @@
 				retvals:'id,images,price,annotations,location,timestamp',
 				 category:"RHFR",
 				 source:'CRAIG',
-				 radius:'6000m',
+				 radius:'3000m',
 				 lat: latitude,
 				 long: longitude,
 				 price:'200..3000',
 				 has_image:1,
 				 has_price:1,
-				 annotations: '{latlong_source: "In Posting"}'
+				 annotations: '{latlong_source: "In Posting" AND cats:* AND dogs:* AND (attached_garage:yes OR carport:yes)}'
 				};
 			
 			//search with typed input
@@ -91,23 +100,27 @@
 					if (array[k]['images'][0] !== undefined && array[k]['images'][0]['full'] !== undefined) {var image=array[k]['images'][0]['full']} 
 					else {var image= 'http://www.peterma.de/secretrio/assets/selfie1.jpg'};
 						
-					var myIcon=L.divIcon({className: 'leaflet-marker-icon',html: '<img src="'+image+'"><div class="markertitle">'+bedroomquant+'<br>$'+array[k]['price']+'</div>'});		
-					L.marker([lat,lon],{icon: myIcon,riseOnHover:'true',listingindex:k })
+					var myIcon=L.divIcon({className: 'leaflet-marker-icon ',html: '<img onload="openmarker(this)" class="closed" src="'+image+'"><div class="markertitle">'+bedroomquant+'<br>$'+array[k]['price']+'</div>'});		
+					L.marker([lat,lon],{icon: myIcon,riseOnHover:'true',listingindex:k})
 							.bindPopup('<a>'+k+'</a>')
 							.addTo(map)
 							.on('click',function(e){toggledetailview(); populatelisting(e['target']['_popup']['_contentNode']['innerText'])})
-					
+							
 					//add latlon to array determining view positioning
 					markerextent[k]=[lat,lon];
 					}
-					
+
 				//fit map view to active markers
 				map.fitBounds(markerextent);
+				
 				})
 			}	
 					    
 			inputsearch();
 			
+			//pop open markers when their respective images load
+			function openmarker(target)
+				{$(target).toggleClass('closed')};
 			//open and close detail window
 			function toggledetailview(){$("#detailview").toggleClass("open")};
 			
@@ -303,3 +316,4 @@
 				  $('body').on('mouseup', function() 
 				  {if (minactive==true || maxactive==true)
 				  {searchparameters['price']=currentmin+'..'+currentmax;dosearch();minactive=false;maxactive=false;}})				
+window.load(console.log('loaded'));

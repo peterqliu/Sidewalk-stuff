@@ -114,10 +114,10 @@
 			<a class='quarter button onoff'>3+ </a>
 
 			<p class='subhead'>Amenities</p>
-			<img src='assets/cat.svg' class='quarter button onoff' height='30' width='30' title='Allows cats'/>
-			<img src='assets/dog.svg' class='button quarter onoff' height='30' title='Allows dogs'/>
-			<img src='assets/hanger.svg' class='button quarter onoff' height='30' width='30' title='On-site laundry'/>
-			<img src='assets/garage.svg' class='button quarter onoff' height='30' title='Garage/carport'/>			
+			<img src='assets/cat.svg' amenity=' AND cats:yes' class='quarter button onoff' height='30' width='30' title='Allows cats'/>
+			<img src='assets/dog.svg' class='button quarter onoff' amenity=' AND dogs:yes' height='30' title='Allows dogs'/>
+			<img src='assets/hanger.svg' amenity=' AND w_d_in_unit:yes' class='button quarter onoff' height='30' width='30' title='On-site laundry'/>
+			<img src='assets/garage.svg' amenity=' AND (attached_garage:yes OR carport:yes)' class='button quarter onoff' height='30' title='Garage/carport'/>		
 	</div>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js"></script>

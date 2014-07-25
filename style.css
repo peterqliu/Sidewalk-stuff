@@ -26,6 +26,8 @@
 				color:white;
 				font-size:2em;
 			}
+			
+			
 			/* Main dialog */
 
 			#maindialog {
@@ -48,6 +50,7 @@
 				background:grey;
 				color:white;
 				padding:10px 9px;
+				float:right;
 			}
 			.right {
 				text-align: end;
@@ -132,6 +135,7 @@
 				height:60px;
 				margin-top:-20px;
 			}
+			
 
 			.leaflet-marker-icon img {
 				border-radius:50%;
@@ -140,11 +144,15 @@
 				-webkit-transition:all 0.1s;
 				margin-left:-20px;
 				margin-top:-20px;
-				background:grey;
-				box-shadow: 0 0px 2px rgba(255, 102, 0, 0.75);
+				background:orange;
+				box-shadow: 0 0px 2px rgba(0, 0, 0, 0.75);
 
 			}
-
+			img.closed {
+				width:0px;
+				height:0px;
+				margin:0px;
+			}
 			#map .leaflet-marker-icon:hover img {
 				width:200px;
 				height:200px;	
@@ -184,13 +192,16 @@
 			#dialogmessage {
 				position:absolute;
 				bottom:0px;
-				padding:10px;
-				background:grey;
 				color:white;
 				text-align:center;
 				display:none;
+				width:50%;
+				margin:0% 25%;
 			}
-
+			#demo {
+				padding:20px;
+				background-color:rgba(0,0,0,0.6);
+			}
 			.drawmode ~ #dialogmessage{
 				display:block;
 			}		
