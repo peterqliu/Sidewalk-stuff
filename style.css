@@ -18,37 +18,73 @@
 				height:100%;
 				-webkit-perspective: 1200;
 			}
-			
+			#loader {
+				position:absolute;
+				top:50%;
+				left:42%;
+				display:none;
+				color:white;
+				font-size:2em;
+			}
 			/* Main dialog */
 
 			#maindialog {
-				width:350px;
+				width:300px;
 				float:left;
 				background:white;
 				margin:10px;
 				position:fixed;
-				padding:10px;
+				padding:20px;
 				border:1px solid #ccc;
 				-webkit-transition:all 0.25s;
 				-webkit-user-select:none;
+			}
+			#locationinput {
+				padding:8px;width: 61%;border: none;font-size: 1.2em;margin: 0px;
+			}
+			
+			#definearea {
+				cursor:pointer;
+				background:grey;
+				color:white;
+				padding:10px 9px;
+			}
+			.right {
+				text-align: end;
 			}
 			.quarter {
 				width:15%;
 			}
 			.button {
-				padding:10px 15px; 
+				padding:10px 12px; 
 				border:1px solid #ccc;
 				cursor:pointer;
+				text-decoration:none;
+				color:inherit;
+				display:inline-block;
+				text-align:center;
 			}
-
+			
+			.subhead {
+				text-transform: uppercase;
+				color:#666;
+				
+			}
+			
+			#rent {
+				font-size:2em;
+				color:#999;
+			}
 			.scrubber {
-				  font-size:2em;
 				  cursor:ew-resize;
 				  -webkit-transition:all 0.2s;
 				  -webkit-user-select: none;
-				
+				color:black;
 				  }
-				
+
+			.scrubber:hover {
+				border-bottom:2px dotted grey;
+			}
 			.scrubber:active {
 				  color:orange;
 				  }
@@ -71,7 +107,7 @@
 				position:absolute;
 				width:100%;
 				height:100%;	
-				background:#abcdef;
+				background:#ccc;
 				-webkit-transition:all 0.25s;
 			}
 			.drawmode {
@@ -265,7 +301,10 @@
 			#bedbath {
 				text-transform: uppercase;
 			}
-			
+			#neighborhood {
+				text-transform:capitalize;
+				font-style:bold;
+			}
 			#gallery {
 				overflow:scroll;
 				display:inline-block;

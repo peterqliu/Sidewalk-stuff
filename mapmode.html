@@ -15,12 +15,12 @@
 
 				<div style='width:65%;overflow:scroll;padding-left:20px;height:100%;margin:0% 2%;'>
 					<h2 id='listingtitle'></h2>
-					<p><span id='bedbath'></span><span id='price'></span><span id='dateposted'></span></p>
+					<p><span id='bedbath'></span> in <span id='neighborhood'></span> posted <span id='dateposted'></span></p>
 					<div id='gallery'></div>
 					<p id='listingbody'></p>
 					<a onclick='toggledetailview()' class='button'>Close</a>
-					<a id='contact'>Contact</a>
-					<a id='listinglink'target='_blank'>Original listing</a>
+					<a id='contact' class='button'>Contact</a>
+					<a id='listinglink' target='_blank' class='button'>Original listing</a>
 				</div>
 
 				
@@ -35,7 +35,8 @@
 			<line id='radius'/>
 			<text id='radiusdistance'> Release to search</text>
 	    </svg>
-	    <div id='dialogmessage'>
+	    <div id='loader'>Fetching listings...</div>
+	    <span id='dialogmessage'>
 			<svg id='demo'>
 				<style>
 					#demo {
@@ -94,19 +95,29 @@
 				<text x='40' y='21'> Click and drag to expand circle</text>
 				<text id='cancel' x='270' y='23' onclick="canceldraw()">✕</text>				
 			</svg>
-	    	</div>
+	    </span>
 		<div id='maindialog'>
+			<p class='subhead'>Location</p>
+			<div style='border:1px solid grey'>
+				<input type='text' id='locationinput' placeholder='City or ZIP' value='San Francisco' onkeydown="if (event.keyCode == 13) {inputsearch()}"/>
+				<a onclick='drawcircle()' id='definearea'>Define area</a>
+			</div>
 
-			<input type='text' id='locationinput' placeholder='City or ZIP' value='San Francisco' onkeydown="if (event.keyCode == 13) {inputsearch()}"/>
-			<a onclick='drawcircle()' class='button'>Define area</a>
-			<div>
-			<span class='scrubber' id='minrent' style=''>$200</span> to <span class='scrubber' id='maxrent' style=''>$3000</span>
-			<br>
-			<img src='assets/cat.svg' class='quarter button' height='30' width='30' title='Allows cats'/>
-			<img src='assets/dog.svg' class='button quarter' height='30' title='Allows dogs'/>
-			<img src='assets/cat.svg' class='button quarter' height='30' width='30' title='Allows cats'/>
-			<img src='assets/dog.svg' class='button quarter' height='30' title='Allows dogs'/>			
-		</div>
+				<p class='subhead'>Rent</p>
+			<div class='right' id='rent'>	
+			<span class='scrubber' id='minrent' style=''>$200</span> ~ <span class='scrubber' id='maxrent' style=''>$3000</span>
+			</div>
+			<p class='subhead'>Bedrooms</p>
+			<a class='quarter button onoff'>Studio </a>
+			<a class='quarter button onoff'>1 </a>
+			<a class='quarter button onoff'>2 </a>
+			<a class='quarter button onoff'>3+ </a>
+
+			<p class='subhead'>Amenities</p>
+			<img src='assets/cat.svg' class='quarter button onoff' height='30' width='30' title='Allows cats'/>
+			<img src='assets/dog.svg' class='button quarter onoff' height='30' title='Allows dogs'/>
+			<img src='assets/hanger.svg' class='button quarter onoff' height='30' width='30' title='On-site laundry'/>
+			<img src='assets/garage.svg' class='button quarter onoff' height='30' title='Garage/carport'/>			
 	</div>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js"></script>
