@@ -72,10 +72,12 @@
 					
 					.done(function(data) {
 				console.log('done fetching');
-				$('#loader').toggle();
+				$('#loader').toggle();				
 				//remove current markers
 				$('#map .leaflet-marker-icon').remove();				
 				array=data.postings;
+				
+				$('#listingcount').text(array.length+' listings found');
 				console.log(data);
 				//array to store latlons of all markers for map positioning purposes
 				window.markerextent=[];
@@ -100,7 +102,7 @@
 					if (array[k]['images'][0] !== undefined && array[k]['images'][0]['full'] !== undefined) {var image=array[k]['images'][0]['full']} 
 					else {var image= 'http://www.peterma.de/secretrio/assets/selfie1.jpg'};
 						
-					var myIcon=L.divIcon({className: 'leaflet-marker-icon ',html: '<img onload="openmarker(this)" class="closed" src="'+image+'"><div class="markertitle">'+bedroomquant+'<br>$'+array[k]['price']+'</div>'});		
+					var myIcon=L.divIcon({className: 'leaflet-marker-icon closed',html: '<img onload="openmarker(this)" class="" src="'+image+'"><div class="markertitle">'+bedroomquant+'<br>$'+array[k]['price']+'</div>'});		
 					L.marker([lat,lon],{icon: myIcon,riseOnHover:'true',listingindex:k})
 							.bindPopup('<a>'+k+'</a>')
 							.addTo(map)
@@ -120,7 +122,7 @@
 			
 			//pop open markers when their respective images load
 			function openmarker(target)
-				{$(target).toggleClass('closed')};
+				{$(target).parent().toggleClass('closed')};
 			//open and close detail window
 			function toggledetailview(){$("#detailview").toggleClass("open")};
 			
@@ -190,7 +192,7 @@
 				detailmap.setView([lat,lon], 16);
 				$.ajax({ url: 'http://api.geonames.org/findNearestIntersectionJSON?lat='+lat+'&lng='+lon+'&username=peterqliu', 
 					success: function(data) { 
-						L.marker([lat,lon],{icon: L.divIcon({className: 'leaflet-marker-icon',html: '<img src="assets/house.svg">'})})
+						L.marker([lat,lon],{icon: L.divIcon({className: 'detail-icon',html: '<img src="assets/house.svg">'})})
 						.bindPopup('<div id="intersectiontooltip">'+data['intersection']['street1']+' at '+data['intersection']['street2']+'</div>',{closeButton:'false'})
 						.addTo(detailmap)
 						.openPopup();
