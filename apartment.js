@@ -36,7 +36,7 @@
 				 price:'200..3000',
 				 has_image:1,
 				 has_price:1,
-				 annotations: '{latlong_source: "In Posting" AND cats:* AND dogs:* AND (attached_garage:yes OR carport:yes)}'
+				 //annotations: '{latlong_source: "In Posting" AND cats:* AND dogs:* AND (attached_garage:yes OR carport:yes)}'
 				};
 			
 			//search with typed input
@@ -47,9 +47,9 @@
 				$.get(geocoderurl).done(function(results) 
 					{searchparameters['lat']=results['features'][0]['center'][1];
 					searchparameters['long']=results['features'][0]['center'][0];	
-					searchparameters['radius']='10mi';
+					searchparameters['radius']='5mi';
 					map.setView([searchparameters['lat'],searchparameters['long']], 14);
-
+					L.marker(results['features'][0]['center']).addTo(map);
 					dosearch();
 					
 					})
@@ -61,11 +61,11 @@
 				searchparameters['long']=lon;
 				searchparameters['radius']=radius+'m';
 				
-				dosearch();
+				dosearch('fitbound');
 			}
 			
 			//execute search with provided parameters
-			function dosearch(){
+			function dosearch(target){
 				
 				$('#loader').toggle();
 				$.get( "http://search.3taps.com", searchparameters)
@@ -78,7 +78,6 @@
 				array=data.postings;
 				
 				$('#listingcount').text(array.length+' listings found');
-				console.log(data);
 				//array to store latlons of all markers for map positioning purposes
 				window.markerextent=[];
 					
@@ -102,7 +101,7 @@
 					if (array[k]['images'][0] !== undefined && array[k]['images'][0]['full'] !== undefined) {var image=array[k]['images'][0]['full']} 
 					else {var image= 'http://www.peterma.de/secretrio/assets/selfie1.jpg'};
 						
-					var myIcon=L.divIcon({className: 'leaflet-marker-icon closed',html: '<img onload="openmarker(this)" class="" src="'+image+'"><div class="markertitle">'+bedroomquant+'<br>$'+array[k]['price']+'</div>'});		
+					var myIcon=L.divIcon({className: 'leaflet-marker-icon closed',html: '<div class="hoverlistener"></div><img onload="openmarker(this)" class="" src="'+image+'"><div class="markertitle">'+bedroomquant+'<br>$'+array[k]['price']+'</div>'});		
 					L.marker([lat,lon],{icon: myIcon,riseOnHover:'true',listingindex:k})
 							.bindPopup('<a>'+k+'</a>')
 							.addTo(map)
@@ -111,10 +110,12 @@
 					//add latlon to array determining view positioning
 					markerextent[k]=[lat,lon];
 					}
+					if(target=='fitbound'){
+					//fit map view to active markers
+					map.fitBounds(markerextent);
+					}
 
-				//fit map view to active markers
-				map.fitBounds(markerextent);
-				
+					else {}
 				})
 			}	
 					    
@@ -173,10 +174,18 @@
 					else {$('#dateposted').text(Math.round(difference/86400)+' days ago')}
 				}
 				
-				//insert pictures
-				$('#gallery').text('');
-				for(var m=0;m<listing['images'].length;m++)
-					{$('#gallery').append("<img class='galleryimg' src='"+listing['images'][m]['full']+"'>")}
+				//remove preview images, insert new ones, set main image to 1st in list
+				d3.selectAll('#preview img').remove();
+				d3.select('#galleryimg').attr('src',listing['images'][0]['full']);
+				var scaleddown=(400/listing['images'].length)-2;
+				d3.select('#preview')
+					.selectAll('img')
+					.data(listing['images'])
+					.enter()
+					.append('img')
+					.attr('style','width:'+scaleddown+'px;height:'+scaleddown+'px')
+					.attr('src',function(d,i){return listing['images'][i]['full']})
+					.on('mouseover',function(d,i){$('#galleryimg').attr('src',listing['images'][i]['full'])});
 
 					//center detail map to listing location								
 					var lat=listing['location']['lat']; 
@@ -187,14 +196,14 @@
 				$('#bedbath').text(listing['annotations']['bedrooms']+', '+listing['annotations']['bathrooms']);
 				$('#neighborhood').text(listing['annotations']['source_neighborhood']);
 				
-				//remove old marker, reset view on new listing, insert new marker at location with tooltip containing intersection (via geonames API call)
+				//remove old marker, insert new marker, reset view on it,  and add tooltip containing intersection (via geonames API call)
 				$('#detailedmap .leaflet-marker-icon').remove();
+				var detailmarker=L.marker([lat,lon],{icon: L.divIcon({className: 'detail-marker',html: '<img src="assets/house.svg">'})})
+					.addTo(detailmap)	
 				detailmap.setView([lat,lon], 16);
 				$.ajax({ url: 'http://api.geonames.org/findNearestIntersectionJSON?lat='+lat+'&lng='+lon+'&username=peterqliu', 
 					success: function(data) { 
-						L.marker([lat,lon],{icon: L.divIcon({className: 'detail-icon',html: '<img src="assets/house.svg">'})})
-						.bindPopup('<div id="intersectiontooltip">'+data['intersection']['street1']+' at '+data['intersection']['street2']+'</div>',{closeButton:'false'})
-						.addTo(detailmap)
+						detailmarker.bindPopup('<div id="intersectiontooltip">'+data['intersection']['street1']+' at '+data['intersection']['street2']+'</div>',{closeButton:'false'})
 						.openPopup();
 					}
 				})			

@@ -31,18 +31,18 @@
 			/* Main dialog */
 
 			#maindialog {
-				width:300px;
+				width:250px;
 				float:left;
 				background:white;
 				margin:10px;
 				position:fixed;
-				padding:20px;
+				padding:15px;
 				border:1px solid #ccc;
 				-webkit-transition:all 0.25s;
 				-webkit-user-select:none;
 			}
 			#locationinput {
-				padding:8px;width: 61%;border: none;font-size: 1.2em;margin: 0px;
+				padding:8px;width: 50%;border: none;font-size: 1.2em;margin: 0px;
 			}
 			
 			#definearea {
@@ -55,11 +55,9 @@
 			.right {
 				text-align: end;
 			}
-			.quarter {
-				width:15%;
-			}
+
 			.button {
-				padding:10px 12px; 
+				padding:10px; 
 				border:1px solid #ccc;
 				cursor:pointer;
 				text-decoration:none;
@@ -67,7 +65,12 @@
 				display:inline-block;
 				text-align:center;
 			}
-			
+
+			.quarter {
+				width:23%;
+				padding:10px 0px;
+			}
+
 			.subhead {
 				text-transform: uppercase;
 				color:#666;
@@ -128,43 +131,39 @@
 			.leaflet-marker-icon {
 				padding-left:6px;
 				}
+			.hoverlistener {
+				position:absolute;
+				opacity:0;
+			}			
 
-
-			.markerline {
-				border-left:3px solid orange;
-				height:60px;
-				margin-top:-20px;
-			}
-			
-
+			.hoverlistener,
 			.leaflet-marker-icon img {
-				border-radius:50%;
+				border-radius:90%;
 				width:40px;
 				height:40px;
-				-webkit-transition:all 0.1s;
+				-webkit-transition:all 0.1s ease-out;
 				margin-left:-20px;
 				margin-top:-20px;
 				background:orange;
 				box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
 				border:2px solid white;
-
 			}
-			.closed {
 
-			}
-			.closed img {
+			.closed img, .closed .hoverlistener {
 				width:0px;
 				height:0px;
 				margin:0px;
 				border:none;
 				box-shadow:none;
 			}
-			#map .leaflet-marker-icon:hover img {
+			.hoverlistener:hover,
+			.hoverlistener:hover ~ img {
 				width:200px;
 				height:200px;	
 				margin-left:-100px;
 				margin-top:-100px;
 				border:none;
+				overflow:hidden;
 			}
 			
 			#map .leaflet-marker-icon:active img{
@@ -187,7 +186,7 @@
 				font-size:1.5em;
 			}
 			
-			#map .leaflet-marker-icon:hover .markertitle {
+			.hoverlistener:hover ~ .markertitle {
 				opacity:1;
 				margin-top:-62px;				
 				-webkit-transition:all .1s;
@@ -265,7 +264,6 @@
 		/* Detail view */
 
 			#detailview {
-				margi:5%;
 				width:100%;
 				position:absolute;
 				z-index:2;
@@ -280,7 +278,13 @@
 			.open#detailview {
 				-webkit-transform:translateY(0px);
 			}
-			
+			.detail-marker img {
+				width:20px;
+				height:20px;
+				border:none;
+				margin-left:-10px;
+				margin-top:-10px;
+			}
 			.open ~ div {
 				-webkit-filter: blur(30px) brightness(90%);
 				pointer-events: none;
@@ -330,16 +334,31 @@
 				text-transform:capitalize;
 				font-style:bold;
 			}
-			#gallery {
-				overflow:scroll;
+
+			#preview {
 				display:inline-block;
-				white-space: nowrap;
+				height:400px;
+				overflow: scroll;
+			}
+
+			#preview img {
+				max-width:60px;
+				max-height:60px;
+				margin-bottom:2px;
+				display:block;
+				padding-right:15px;
+			}
+
+			#preview img:hover ~ img {
+				opacity:0.5;
+			}
+			#gallery {
+				display:table;
 				width:100%;
-				background:#333;
-				cursor:ew-resize;
+				background:#eee;
+				height:400px;
 			}
 			
-			.galleryimg {
-				display:inline;
-				vertical-align: middle;
+			#galleryimg {
+				max-height:400px;
 			}
