@@ -157,7 +157,7 @@
 				box-shadow:none;
 			}
 			.hoverlistener:hover,
-			.hoverlistener:hover ~ img {
+			.hoverlistener:hover~img {
 				width:200px;
 				height:200px;	
 				margin-left:-100px;
@@ -186,7 +186,7 @@
 				font-size:1.5em;
 			}
 			
-			.hoverlistener:hover ~ .markertitle {
+			.hoverlistener:hover~.markertitle {
 				opacity:1;
 				margin-top:-62px;				
 				-webkit-transition:all .1s;
@@ -212,7 +212,7 @@
 				padding:20px;
 				background-color:rgba(0,0,0,0.6);
 			}
-			.drawmode ~ #dialogmessage{
+			.drawmode~#dialogmessage{
 				display:block;
 			}		
 			
@@ -275,6 +275,10 @@
 				transition-timing-functio: cubic-bezier(0,1.65,.65,1);
 			}		
 
+			#detailtext {
+				width:68%;overflow:scroll;height:100%;margin:0% 2%;
+			}
+
 			.open#detailview {
 				-webkit-transform:translateY(0px);
 			}
@@ -285,7 +289,7 @@
 				margin-left:-10px;
 				margin-top:-10px;
 			}
-			.open ~ div {
+			.open~div {
 				-webkit-filter: blur(30px) brightness(90%);
 				pointer-events: none;
 			}
@@ -309,7 +313,6 @@
 				float:right;
 				width:30%;
 				background:#eee;
-				margin-left:2%;
 				height:100%;
 				border-left:1px solid #ccc;
 			}
@@ -338,7 +341,7 @@
 			#preview {
 				display:inline-block;
 				height:400px;
-				overflow: scroll;
+				overflow: hidden;
 			}
 
 			#preview img {
@@ -349,7 +352,7 @@
 				padding-right:15px;
 			}
 
-			#preview img:hover ~ img {
+			#preview img:hover~img {
 				opacity:0.5;
 			}
 			#gallery {

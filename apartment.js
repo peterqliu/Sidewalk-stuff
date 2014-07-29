@@ -18,7 +18,7 @@
 			});
 
 			new L.Control.Zoom({ position: 'topright' }).addTo(map);
-			var detailmap=L.mapbox.map('detailedmap', 'examples.map-0l53fhk2', {scrollWheelZoom: true,zoomControl:false});
+			var detailmap=L.mapbox.map('detailedmap', 'vsco.map-hd230o83', {scrollWheelZoom: true,zoomControl:false});
 			
 			
 			
@@ -43,13 +43,14 @@
 		    function inputsearch()
 				{//translate inputed city/ZIP into lat-lon
 				var locationquery=$('#locationinput').val();
-				geocoderurl='http://api.tiles.mapbox.com/v4/geocode/mapbox.places-v1/'+locationquery+'.json?access_token=pk.eyJ1IjoicGV0ZXJxbGl1IiwiYSI6ImpvZmV0UEEifQ._D4bRmVcGfJvo1wjuOpA1g'
+				geocoderurl='https://maps.googleapis.com/maps/api/geocode/json?address='+locationquery;
 				$.get(geocoderurl).done(function(results) 
-					{searchparameters['lat']=results['features'][0]['center'][1];
-					searchparameters['long']=results['features'][0]['center'][0];	
+					{console.log(results);
+					searchparameters['lat']=results['results'][0]['geometry']['location']['lat'];
+					searchparameters['long']=results['results'][0]['geometry']['location']['lng'];	
 					searchparameters['radius']='5mi';
 					map.setView([searchparameters['lat'],searchparameters['long']], 14);
-					L.marker(results['features'][0]['center']).addTo(map);
+					//L.marker(results['features'][0]['center']).addTo(map);
 					dosearch();
 					
 					})
