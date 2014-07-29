@@ -13,11 +13,17 @@
 			window.longitude=-122.4156;
 			
 			//initialize main map and detail map
-			var map=L.mapbox.map('map', 'vsco.map-hd230o83', {
-			    scrollWheelZoom: true, zoomControl:false
-			});
-
+			var map=L.mapbox.map('map', 'vsco.map-hd230o83', 
+				{scrollWheelZoom: true, zoomControl:false});
+			map.on('zoomend', function() 
+				{if (map.getZoom() < 13) 
+					{$('#map').addClass('zoomedout')}
+				 else {$('#map').removeClass('zoomedout')}
+				});
 			new L.Control.Zoom({ position: 'topright' }).addTo(map);
+
+
+
 			var detailmap=L.mapbox.map('detailedmap', 'vsco.map-hd230o83', {scrollWheelZoom: true,zoomControl:false});
 			
 			
@@ -103,10 +109,10 @@
 					else {var image= 'http://www.peterma.de/secretrio/assets/selfie1.jpg'};
 						
 					var myIcon=L.divIcon({className: 'leaflet-marker-icon closed',html: '<div class="hoverlistener"></div><img onload="openmarker(this)" class="" src="'+image+'"><div class="markertitle">'+bedroomquant+'<br>$'+array[k]['price']+'</div>'});		
-					L.marker([lat,lon],{icon: myIcon,riseOnHover:'true',listingindex:k})
-							.bindPopup('<a>'+k+'</a>')
+					L.marker([lat,lon],{icon: myIcon,riseOnHover:'true'})
+							.bindPopup(k)
 							.addTo(map)
-							.on('click',function(e){toggledetailview(); populatelisting(e['target']['_popup']['_contentNode']['innerText'])})
+							.on('mousedown',function(e){toggledetailview(); console.log(e); populatelisting(e['target']['_popup']['_content'])})
 							
 					//add latlon to array determining view positioning
 					markerextent[k]=[lat,lon];
@@ -115,8 +121,6 @@
 					//fit map view to active markers
 					map.fitBounds(markerextent);
 					}
-
-					else {}
 				})
 			}	
 					    
@@ -125,12 +129,16 @@
 			//pop open markers when their respective images load
 			function openmarker(target)
 				{$(target).parent().toggleClass('closed')};
+
 			//open and close detail window
-			function toggledetailview(){$("#detailview").toggleClass("open")};
+			function toggledetailview()
+				{$("#detailview").toggleClass("open");
+				 $('#detailtext').scrollTop(0)};
 			
 			//fetch heading, timestamp, HTML body text
-			function fetchdetail(id,phone,email){$.get( "http://search.3taps.com", 
-				{auth_token: "358297d537d9b89bd5b5720bbe255c65",id:id,retvals:'html,heading,timestamp,external_url,price'})
+			function fetchdetail(id,phone,email)
+				{$.get( "http://search.3taps.com", 
+					{auth_token: "358297d537d9b89bd5b5720bbe255c65",id:id,retvals:'html,heading,timestamp,external_url,price'})
 				.done(function(data) 
 					{var html=atob(data.postings[0]['html']);
 					var postingbody=html.substring(html.lastIndexOf('<section id="postingbody">')+26,html.lastIndexOf('<ul class="notices">'));
@@ -156,9 +164,10 @@
 					}
 				)};
 			
-			//when user clicks on marker, populates detail view with appropriate heading and body
+			//when user clicks on marker, scroll detailview to top, populates detail view with appropriate heading and body
 			function populatelisting(e)
 				{var listing=array[e];
+				$('#detailtext').scrollTop(0);
 				fetchdetail(listing['id'],listing['annotations']['phone']);
 
 				

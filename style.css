@@ -127,7 +127,12 @@
 			.leaflet-control-attribution {
 				display:none;
 			}
-
+			.zoomedout .leaflet-marker-icon img{
+				border:3px solid #666;
+				width:0px;
+				height:0px;
+				box-shadow:none;
+			}
 			.leaflet-marker-icon {
 				padding-left:6px;
 				}
@@ -142,6 +147,7 @@
 				width:40px;
 				height:40px;
 				-webkit-transition:all 0.1s ease-out;
+				-webkit-transform-origin:50% 50%;
 				margin-left:-20px;
 				margin-top:-20px;
 				background:orange;
@@ -150,9 +156,7 @@
 			}
 
 			.closed img, .closed .hoverlistener {
-				width:0px;
-				height:0px;
-				margin:0px;
+				-webkit-transform:scale(0);
 				border:none;
 				box-shadow:none;
 			}
@@ -352,7 +356,7 @@
 				padding-right:15px;
 			}
 
-			#preview img:hover~img {
+			#preview img:hover {
 				opacity:0.5;
 			}
 			#gallery {
