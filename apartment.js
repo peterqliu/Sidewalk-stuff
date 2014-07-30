@@ -187,15 +187,16 @@
 				//remove preview images, insert new ones, set main image to 1st in list
 				d3.selectAll('#preview img').remove();
 				d3.select('#galleryimg').attr('src',listing['images'][0]['full']);
-				var scaleddown=(400/listing['images'].length)-2;
-				d3.select('#preview')
-					.selectAll('img')
-					.data(listing['images'])
-					.enter()
-					.append('img')
-					.attr('style','width:'+scaleddown+'px;height:'+scaleddown+'px')
-					.attr('src',function(d,i){return listing['images'][i]['full']})
-					.on('mouseover',function(d,i){$('#galleryimg').attr('src',listing['images'][i]['full'])});
+				if (listing['images'].length>1)
+					{var scaleddown=(400/listing['images'].length)-3;
+					d3.select('#preview')
+						.selectAll('img')
+						.data(listing['images'])
+						.enter()
+						.append('img')
+						.attr('style','width:'+scaleddown+'px;height:'+scaleddown+'px')
+						.attr('src',function(d,i){return listing['images'][i]['full']})
+						.on('mouseover',function(d,i){$('#galleryimg').attr('src',listing['images'][i]['full'])});}
 
 					//center detail map to listing location								
 					var lat=listing['location']['lat']; 
