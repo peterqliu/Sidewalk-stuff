@@ -232,6 +232,11 @@
 				height: 100%;
 			}
 			
+			#drawradius {
+				stroke:grey;
+				stroke-opacity:1;
+				stroke-width:2px;				
+			}		
 			#outer {
 				stroke-width:2px;
 				stroke:grey;
@@ -287,7 +292,9 @@
 				height: 95%;
 				float: right;
 				padding: 2%;
+				line-height:1.3em;
 			}
+			
 
 			.open#detailview {
 				-webkit-transform:translateY(0px);

@@ -142,7 +142,8 @@
 				.done(function(data) 
 					{var html=atob(data.postings[0]['html']);
 					var postingbody=html.substring(html.lastIndexOf('<section id="postingbody">')+26,html.lastIndexOf('<ul class="notices">'));
-					postingbody=postingbody.replace(/â¢/g,'• ');
+					postingbody=postingbody.replace(/â¢/g,'• ').replace(/(<br\s*\/?>){3,}/gi, '<br>');
+					console.log(postingbody);
 					$('#listingtitle').text('$'+data.postings[0]['price']+' '+data.postings[0]['heading']);
 					$('#listingbody').html(postingbody);
 
@@ -271,7 +272,7 @@
 									.attr('r', radius)
 									.attr('fill-opacity',Math.pow(0.9,(radius*0.1)));
 								
-								d3.select('#radius')
+								d3.select('#drawradius')
 									.attr('opacity',1)
 									.attr('x2',e.pageX)
 									.attr('y2',e.pageY)
