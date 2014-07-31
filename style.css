@@ -1,20 +1,27 @@
 			@font-face {
-			  font-family: 'Lato';
+			  font-family: 'Whitney';
+			  font-style: normal;
+			  font-weight: 100;
+			  src: local('Whitney Regular'), local('Whitney-Regular'), url(assets/Whitney-Light.woff) format('woff');
+			}
+
+			@font-face {
+			  font-family: 'Whitney';
 			  font-style: normal;
 			  font-weight: 400;
-			  src: local('Lato Regular'), local('Lato-Regular'), url(http://themes.googleusercontent.com/static/fonts/lato/v7/qIIYRU-oROkIk8vfvxw6QvesZW2xOQ-xsNqO47m55DA.woff) format('woff');
+			  src: local('Whitney Regular'), local('Whitney-Regular'), url(assets/Whitney-Medium.woff) format('woff');
 			}
 			@font-face {
-			  font-family: 'Lato';
+			  font-family: 'Whitney';
 			  font-style: normal;
 			  font-weight: 700;
-			  src: local('Lato Bold'), local('Lato-Bold'), url(http://themes.googleusercontent.com/static/fonts/lato/v7/qdgUG4U09HnJwhYI-uK18wLUuEpTyoUstqEm5AMlJo4.woff) format('woff');
+			  src: local('Whitney Bold'), local('Whitney-Bold'), url(assets/Whitney-Semibold.woff) format('woff');
 			}		
 			
 			body,html {
 				margin:0 auto;
 				background:#ccc;
-				font-family: Lato, sans-serif;
+				font-family: Whitney, sans-serif;
 				height:100%;
 				-webkit-perspective: 1200;
 				min-width:1024px;
@@ -110,6 +117,9 @@
 
 
 		/* Main map panel */
+			.leaflet-container {
+				font-family: inherit;
+			}
 
 			#map {
 				position:absolute;
@@ -129,7 +139,8 @@
 			.leaflet-control-attribution {
 				display:none;
 			}
-			.zoomedout .leaflet-marker-icon img{
+			.zoomedout .leaflet-marker-icon img,
+			.zoomedout .hoverlistener {
 				border:3px solid #666;
 				width:0px;
 				height:0px;
@@ -140,7 +151,6 @@
 				}
 			.hoverlistener {
 				position:absolute;
-				opacity:0;
 			}			
 
 			.hoverlistener,
@@ -148,13 +158,14 @@
 				border-radius:90%;
 				width:40px;
 				height:40px;
-				-webkit-transition:all 0.1s ease-out;
+				-webkit-transition:all 0.25s ease-out;
 				-webkit-transform-origin:50% 50%;
+				-webkit-transition-timing-function:cubic-bezier(0,1.4,.87,1);
 				margin-left:-20px;
 				margin-top:-20px;
-				background:orange;
 				box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
 				border:2px solid white;
+				background-image:url('assets/fulltitlebg.png');
 			}
 
 			.closed img, .closed .hoverlistener {
@@ -168,7 +179,6 @@
 				height:200px;	
 				margin-left:-100px;
 				margin-top:-100px;
-				border:none;
 				overflow:hidden;
 			}
 			
@@ -180,16 +190,16 @@
 			}
 			.markertitle {
 				text-align:center;
-				background-image:url('assets/listingtitlebg.png');
 				padding:5px;
 				width:200px;
 				margin-left:-100px;
 				position:absolute;
 				height:57px;
-				color:white;
+				color:black;
 				opacity:0;
 				pointer-events: none;	
-				font-size:1.5em;
+				font-size:1.3em;
+				line-height:300%;
 			}
 			
 			.hoverlistener:hover~.markertitle {
@@ -319,13 +329,33 @@
 			}
 			
 			#listingtitle {
-				font-weight:500;
-				font-size:2em;
-			}
-			#listingbody {
-				color:#333;
+				font-weight:100;
+				font-size:1.5em;
 			}
 
+			#listingbody {
+				color:#666;
+				line-height: 120%;
+			}
+
+			#listingbody h1,
+			#listingbody h2,
+			#listingbody h3,
+			#listingbody b
+			{
+				color:#333;
+			}
+			h1 {
+				font-size:1.5em;
+			}
+
+			h2 {
+				font-size:1.2em;
+			}
+
+			h3,h4,h5,h6 {
+				font-size:inherit;
+			}
 			.showcontact {
 				text-decoration: none;
 				pointer-events:none;
@@ -353,7 +383,7 @@
 			}
 			#intersectiontooltip {
 				font-size:1.5em;
-				font-weight:600;
+				font-weight:400;
 				margin-bottom:-5px;
 				text-align:center;
 			}
@@ -385,6 +415,7 @@
 			#gallery {
 				width:120%;
 				height:400px;
+				margin:20px 0px;
 			}
 			
 			#galleryimg {

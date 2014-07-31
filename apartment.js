@@ -108,7 +108,7 @@
 					if (array[k]['images'][0] !== undefined && array[k]['images'][0]['full'] !== undefined) {var image=array[k]['images'][0]['full']} 
 					else {var image= 'http://www.peterma.de/secretrio/assets/selfie1.jpg'};
 						
-					var myIcon=L.divIcon({className: 'leaflet-marker-icon closed',html: '<div class="hoverlistener"></div><img onload="openmarker(this)" class="" src="'+image+'"><div class="markertitle">'+bedroomquant+'<br>$'+array[k]['price']+'</div>'});		
+					var myIcon=L.divIcon({className: 'leaflet-marker-icon closed',html: '<div class="hoverlistener"></div><img onload="openmarker(this)" class="" src="'+image+'"><div class="markertitle">'+bedroomquant+' • $'+array[k]['price']+'</div>'});		
 					L.marker([lat,lon],{icon: myIcon,riseOnHover:'true'})
 							.bindPopup(k)
 							.addTo(map)
@@ -142,10 +142,12 @@
 				.done(function(data) 
 					{var html=atob(data.postings[0]['html']);
 					var postingbody=html.substring(html.lastIndexOf('<section id="postingbody">')+26,html.lastIndexOf('<ul class="notices">'));
-					postingbody=postingbody.replace(/â¢/g,'• ').replace(/(<br\s*\/?>){3,}/gi, '<br>');
+					postingbody=postingbody.replace(/â¢/g,'• ')
+											.replace(/(<br\s*\/?>){3,}/gi, '<br>')
+											.replace(/Â /g,'');
 					console.log(postingbody);
 					$('#listingprice').text('$'+data.postings[0]['price']);
-					$('#listingtitle').text(data.postings[0]['heading']);
+					$('#listingtitle').html(data.postings[0]['heading']);
 					$('#listingbody').html(postingbody);
 
 					//Inject phone number into "show info"
@@ -206,8 +208,8 @@
 				
 				//populate bed/bath, price
 				
-				$('#bedbath').text(listing['annotations']['bedrooms']+', '+listing['annotations']['bathrooms']);
-				$('#neighborhood').text(listing['annotations']['source_neighborhood']);
+				$('#bedbath').html(listing['annotations']['bedrooms']+', '+listing['annotations']['bathrooms']);
+				$('#neighborhood').html(listing['annotations']['source_neighborhood']);
 				
 				//remove old marker, insert new marker, reset view on it,  and add tooltip containing intersection (via geonames API call)
 				$('#detailedmap .leaflet-marker-icon').remove();
@@ -262,8 +264,8 @@
 
 						d3.select('#radiusdistance')
 							.attr('x',circlecenter[0])
-							.attr('y',circlecenter[1])
-							.attr('font-size','2em')
+							.attr('y',circlecenter[1]-20)
+							.attr('font-size','1.2em')
 							.text('');		
 							
 						$('#map').mousemove(function(e)
@@ -340,4 +342,3 @@
 				  $('body').on('mouseup', function() 
 				  {if (minactive==true || maxactive==true)
 				  {searchparameters['price']=currentmin+'..'+currentmax;dosearch();minactive=false;maxactive=false;}})				
-window.load(console.log('loaded'));
