@@ -144,7 +144,8 @@
 					var postingbody=html.substring(html.lastIndexOf('<section id="postingbody">')+26,html.lastIndexOf('<ul class="notices">'));
 					postingbody=postingbody.replace(/â¢/g,'• ').replace(/(<br\s*\/?>){3,}/gi, '<br>');
 					console.log(postingbody);
-					$('#listingtitle').text('$'+data.postings[0]['price']+' '+data.postings[0]['heading']);
+					$('#listingprice').text('$'+data.postings[0]['price']);
+					$('#listingtitle').text(data.postings[0]['heading']);
 					$('#listingbody').html(postingbody);
 
 					//Inject phone number into "show info"
@@ -256,7 +257,7 @@
 						.attr('cy',circlecenter[1])
 						.attr('r',0);
 
-						d3.select('#radius')
+						d3.select('#drawradius')
 							.attr('opacity',0);
 
 						d3.select('#radiusdistance')

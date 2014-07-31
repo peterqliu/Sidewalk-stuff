@@ -65,6 +65,7 @@
 				color:inherit;
 				display:inline-block;
 				text-align:center;
+				background:white;
 			}
 
 			.quarter {
@@ -287,12 +288,12 @@
 
 			#detailtext {
 				width: 64%;
+				position:relative;
 				overflow-y: scroll;
 				overflow-x:hidden;
 				height: 95%;
 				float: right;
 				padding: 2%;
-				line-height:1.3em;
 			}
 			
 
@@ -310,7 +311,17 @@
 				-webkit-filter: blur(30px) brightness(90%);
 				pointer-events: none;
 			}
+			#listingprice {
+				color: white;
+				background: gray;
+				padding: 2px 5px;
+				border-radius: 4px;
+			}
 			
+			#listingtitle {
+				font-weight:500;
+				font-size:2em;
+			}
 			#listingbody {
 				color:#333;
 			}
