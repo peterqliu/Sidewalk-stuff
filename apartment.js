@@ -1,12 +1,14 @@
 			$('.onoff')
 				.attr('onclick','$(this).toggleClass("on")')
 				.click(function(){toggleamenity($(this).attr('amenity'))});
-			//var cats=dogs=w_d_in_unit=garage=true;
-			cats=(cats=true) ? 'AND cats:yes':'';
+			//var mustcat=mustdog=mustlaundry+mustgarage=false;	
+			//cats=(cats==true) ? 'yes':'*';
+			//cats=(dogs==true) ? 'yes':'*';
+			//laundry=(laundry==true) ? 'yes':'*';
 			var laundry='AND w_d_in_unit:yes';
 			
 			function toggleamenity(type)
-				{console.log(type)};
+				{type=!type};
 			
 			
 			window.latitude=37.7484;
@@ -24,7 +26,7 @@
 
 
 
-			var detailmap=L.mapbox.map('detailedmap', 'vsco.map-hd230o83', {scrollWheelZoom: true,zoomControl:false});
+			var detailmap=L.mapbox.map('detailedmap', 'heyitsgarrett.ieig8kg4', {scrollWheelZoom: true,zoomControl:false});
 			
 			
 			
@@ -108,7 +110,7 @@
 					if (array[k]['images'][0] !== undefined && array[k]['images'][0]['full'] !== undefined) {var image=array[k]['images'][0]['full']} 
 					else {var image= 'http://www.peterma.de/secretrio/assets/selfie1.jpg'};
 						
-					var myIcon=L.divIcon({className: 'leaflet-marker-icon closed',html: '<div class="hoverlistener"></div><img onload="openmarker(this)" class="" src="'+image+'"><div class="markertitle">'+bedroomquant+' • $'+array[k]['price']+'</div>'});		
+					var myIcon=L.divIcon({className: 'leaflet-marker-icon closed',html: '<div class="markertitle">'+bedroomquant+' • $'+array[k]['price']+'</div><img onload="openmarker(this)" class="" src="'+image+'">'});		
 					L.marker([lat,lon],{icon: myIcon,riseOnHover:'true'})
 							.bindPopup(k)
 							.addTo(map)
@@ -146,8 +148,12 @@
 											.replace(/(<br\s*\/?>){3,}/gi, '<br>')
 											.replace(/Â /g,'');
 					console.log(postingbody);
-					$('#listingprice').text('$'+data.postings[0]['price']);
-					$('#listingtitle').html(data.postings[0]['heading']);
+					
+					var price='$'+data.postings[0]['price'];
+					var heading=data.postings[0]['heading'].replace(/price/g,'PRICEWASHERE');
+					
+					$('#listingprice').text(price);
+					$('#listingtitle').html(heading);
 					$('#listingbody').html(postingbody);
 
 					//Inject phone number into "show info"
@@ -191,25 +197,30 @@
 				//remove preview images, insert new ones, set main image to 1st in list
 				d3.selectAll('#preview img').remove();
 				d3.select('#galleryimg').attr('src',listing['images'][0]['full']);
-				if (listing['images'].length>1)
-					{var scaleddown=(400/listing['images'].length)-3;
+				var numpics=listing['images'].length;
+				if (numpics>1)
+					{var scaleddown=(420/numpics)-4;
+					
+					var columns=Math.ceil(numpics/7);
+					//$('#preview').attr('style','-webkit-column-count:'+columns);
+				
 					d3.select('#preview')
 						.selectAll('img')
 						.data(listing['images'])
 						.enter()
 						.append('img')
-						.attr('style','width:'+scaleddown+'px;height:'+scaleddown+'px')
+						//.attr('style','width:'+scaleddown+'px;height:'+scaleddown+'px')
 						.attr('src',function(d,i){return listing['images'][i]['full']})
 						.on('mouseover',function(d,i){$('#galleryimg').attr('src',listing['images'][i]['full'])});}
 
 					//center detail map to listing location								
 					var lat=listing['location']['lat']; 
 					var lon=listing['location']['long'];
-				
+					var annotations=listing['annotations'];
 				//populate bed/bath, price
 				
-				$('#bedbath').html(listing['annotations']['bedrooms']+', '+listing['annotations']['bathrooms']);
-				$('#neighborhood').html(listing['annotations']['source_neighborhood']);
+				$('#bedbath').html(annotations['bedrooms']+', '+listing['annotations']['bathrooms']);
+				$('#neighborhood').html(annotations['source_neighborhood']);
 				
 				//remove old marker, insert new marker, reset view on it,  and add tooltip containing intersection (via geonames API call)
 				$('#detailedmap .leaflet-marker-icon').remove();
@@ -218,7 +229,7 @@
 				detailmap.setView([lat,lon], 16);
 				$.ajax({ url: 'http://api.geonames.org/findNearestIntersectionJSON?lat='+lat+'&lng='+lon+'&username=peterqliu', 
 					success: function(data) { 
-						detailmarker.bindPopup('<div id="intersectiontooltip">'+data['intersection']['street1']+' at '+data['intersection']['street2']+'</div>',{closeButton:'false'})
+						detailmarker.bindPopup('<span class="streetname">'+data['intersection']['street1']+'</span> at <span class="streetname">'+data['intersection']['street2']+'</span>',{closeButton:'false'})
 						.openPopup();
 					}
 				})			
@@ -242,7 +253,7 @@
 						map.on('mousemove',function(e)
 							{var mileradius= 0.000621371*(L.latLng(centerlatlon[0],centerlatlon[1]).distanceTo([e.latlng.lat,e.latlng.lng]));
 								d3.select('#radiusdistance')
-									.text(Math.round(mileradius*10)/10+' mi');
+									.text(Math.round(mileradius*10)/10+'');
 						});			
 					});		
 							
@@ -264,7 +275,7 @@
 
 						d3.select('#radiusdistance')
 							.attr('x',circlecenter[0])
-							.attr('y',circlecenter[1]-20)
+							.attr('y',circlecenter[1]+10)
 							.attr('font-size','1.2em')
 							.text('');		
 							

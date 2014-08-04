@@ -15,15 +15,17 @@
 					<div style='position:absolute;top:0px;left:0px;background:grey;color:white'>✕</div>
 
 				<div id='detailtext'>
-					<p style='min-width:500px; width:80%'>
+					<p style='min-width:500px'>
 						<span id='listingtitle'></span>
-						<span id='listingprice'></span>
 					</p>
-					<p><span id='bedbath'></span> in <span id='neighborhood'></span> posted <span id='dateposted'></span></p>
+					<p id='listingsubtitle'><span id='listingprice'></span> for a 
+					<span id='bedbath'></span> in <span id='neighborhood'></span> (posted <span id='dateposted'></span>)</p>
 
 					<div id='gallery'>
 						<div id='preview'></div>
-						<img id='galleryimg'>
+						<div id='mainimg'>
+							<img id='galleryimg'/>
+						</div>
 					</div>
 					<p id='listingbody'></p>
 					<a onclick='toggledetailview()' class='button'>Close</a>
@@ -37,11 +39,11 @@
 	    </div>
 	    <svg id='circledraw'>
 	    	<circle id='outer'/>
-			<circle id='center' r='10'/>
+			<circle id='center' r='20'/>
 			<line id='drawradius'/>
 			<text id='radiusdistance'> Release to search</text>
 	    </svg>
-	    <div id='loader'>Fetching listings...</div>
+	    <div id='loader'><img src='assets/loader.gif'/></div>
 	    <div id='listingcount'></div>
 	    <span id='dialogmessage'>
 			<svg id='demo'>
@@ -121,9 +123,9 @@
 			<a class='quarter button onoff'>3+ </a>
 
 			<p class='subhead'>Amenities</p>
-			<img src='assets/cat.svg' amenity=' AND cats:yes' class='quarter button onoff' height='30' width='30' title='Allows cats'/>
-			<img src='assets/dog.svg' class='button quarter onoff' amenity=' AND dogs:yes' height='30' title='Allows dogs'/>
-			<img src='assets/hanger.svg' amenity=' AND w_d_in_unit:yes' class='button quarter onoff' height='30' width='30' title='On-site laundry'/>
+			<img src='assets/cat.svg' amenity='mustcat' class='quarter button onoff' height='30' width='30' title='Allows cats'/>
+			<img src='assets/dog.svg' class='button quarter onoff' amenity='mustdog' height='30' title='Allows dogs'/>
+			<img src='assets/hanger.svg' amenity='mustlaundry' class='button quarter onoff' height='30' width='30' title='On-site laundry'/>
 			<img src='assets/garage.svg' amenity=' AND (attached_garage:yes OR carport:yes)' class='button quarter onoff' height='30' title='Garage/carport'/>		
 	</div>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

@@ -139,8 +139,7 @@
 			.leaflet-control-attribution {
 				display:none;
 			}
-			.zoomedout .leaflet-marker-icon img,
-			.zoomedout .hoverlistener {
+			.zoomedout .leaflet-marker-icon img{
 				border:3px solid #666;
 				width:0px;
 				height:0px;
@@ -149,64 +148,53 @@
 			.leaflet-marker-icon {
 				padding-left:6px;
 				}
-			.hoverlistener {
-				position:absolute;
-			}			
+				
+		
 
-			.hoverlistener,
+			.markertitle,
 			.leaflet-marker-icon img {
-				border-radius:90%;
+				border-radius:50%;
 				width:40px;
 				height:40px;
 				-webkit-transition:all 0.25s ease-out;
 				-webkit-transform-origin:50% 50%;
-				-webkit-transition-timing-function:cubic-bezier(0,1.4,.87,1);
+				-webkit-transition-timing-function:cubic-bezier(0,1.2,.87,1);
 				margin-left:-20px;
 				margin-top:-20px;
 				box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
 				border:2px solid white;
-				background-image:url('assets/fulltitlebg.png');
 			}
 
-			.closed img, .closed .hoverlistener {
+			.closed * {
 				-webkit-transform:scale(0);
 				border:none;
 				box-shadow:none;
 			}
-			.hoverlistener:hover,
-			.hoverlistener:hover~img {
+			.markertitle:hover,
+			.markertitle:hover~img {
 				width:200px;
 				height:200px;	
 				margin-left:-100px;
 				margin-top:-100px;
 				overflow:hidden;
+				opacity:1;
+				font-size:1.3em;
 			}
 			
-			#map .leaflet-marker-icon:active img{
-			}		
+		
 			
 			#map .leaflet-popup-pane {
 				display:none;
 			}
 			.markertitle {
-				text-align:center;
-				padding:5px;
-				width:200px;
-				margin-left:-100px;
 				position:absolute;
-				height:57px;
+				text-align:center;
 				color:black;
-				opacity:0;
-				pointer-events: none;	
-				font-size:1.3em;
-				line-height:300%;
-			}
-			
-			.hoverlistener:hover~.markertitle {
+				font-weight:100;
 				opacity:1;
-				margin-top:-62px;				
-				-webkit-transition:all .1s;
-				pointer-event: none;				
+				background-image:url('assets/fulltitlebg.png');
+				font-size:0em;
+				line-height:22.5em;
 			}
 	
 			#listingcount {
@@ -265,7 +253,7 @@
 			}
 
 			#radiusdistance {
-				fill:grey;
+				fill:white;
 				text-anchor:middle;
 			}
 			.leaflet-popup-close-button {
@@ -284,8 +272,8 @@
 		/* Detail view */
 
 			#detailview {
-				width:80%;
-				margin:30px 10%;
+				width:90%;
+				max-width:1500px;
 				position:absolute;
 				z-index:2;
 				background:white;
@@ -294,16 +282,20 @@
 				height:90%;
 				box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
 				overflow:hidden;
+				left:0;
+				right:0;
+				margin:20px auto auto auto;
 			}		
 
 			#detailtext {
-				width: 64%;
+				width: 62%;
 				position:relative;
 				overflow-y: scroll;
 				overflow-x:hidden;
-				height: 95%;
-				float: right;
-				padding: 2%;
+				height: 92%;
+				padding:2% 4%;
+				position:absolute;
+				right:0px;
 			}
 			
 
@@ -321,21 +313,28 @@
 				-webkit-filter: blur(30px) brightness(90%);
 				pointer-events: none;
 			}
-			#listingprice {
-				color: white;
-				background: gray;
-				padding: 2px 5px;
-				border-radius: 4px;
+			#listingprice,
+			#neighborhood, 
+			#bedbath {
+				color: #57656c;
+				font-weight:bold;
+				font-style: normal;
 			}
 			
 			#listingtitle {
 				font-weight:100;
-				font-size:1.5em;
+				font-size:1.7em;
 			}
-
+			#listingsubtitle {
+				color:#a7b5bc;
+				font-family:Georgia, serif;
+				font-style:italic;
+			}
 			#listingbody {
 				color:#666;
 				line-height: 120%;
+				font-family:Georgia, serif;
+
 			}
 
 			#listingbody h1,
@@ -366,6 +365,8 @@
 			
 			}
 
+
+			/* Detail map */
 			#detailedmap {
 				width:30%;
 				background:#eee;
@@ -381,12 +382,23 @@
 				width:20px;
 				height:20px;
 			}
-			#intersectiontooltip {
+			.leaflet-popup-content {
 				font-size:1.5em;
-				font-weight:400;
 				margin-bottom:-5px;
 				text-align:center;
+				font-weight:100;
+				color:#666;
+
 			}
+			
+			.streetname {
+				font-weight:400;
+				display:inline-block;
+				color:black;
+			}
+			
+			
+			
 			#bedbath {
 				text-transform: uppercase;
 			}
@@ -397,15 +409,17 @@
 
 			#preview {
 				display:inline-block;
-				overflow: hidden;
+				overflow: scroll;
 				vertical-align: top;
 				padding-right:15px;
+				width:50px;
+				height:420px;
 			}
 
 			#preview img {
-				max-width:60px;
-				max-height:60px;
-				margin-bottom:3px;
+				width:46px;
+				height:46px;
+				margin:2px;
 				display:block;
 			}
 
@@ -413,12 +427,20 @@
 				opacity:0.5;
 			}
 			#gallery {
-				width:120%;
-				height:400px;
+				width:100%;
+				height:420px;
 				margin:20px 0px;
 			}
-			
+			#mainimg {
+				width:80%;
+				height:420px;
+				display:inline-block;
+				background:#efefef;
+			}
 			#galleryimg {
-				max-height:400px;
-				max-width:80%;
+			width:auto;
+			margin:0 auto;
+			height:420px;
+			max-width:100%;
+			display:block;
 			}
