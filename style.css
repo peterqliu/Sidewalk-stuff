@@ -50,9 +50,18 @@
 				-webkit-user-select:none;
 			}
 			#locationinput {
-				padding:8px;width: 50%;border: none;font-size: 1.2em;margin: 0px;
+				padding:8px;
+				width: 50%;
+				border: none;
+				font-size: 1.2em;
+				margin: 0px;
+				font-family:Georgia, serif;
+				outline:none;
+				text-transform:capitalize;
 			}
-			
+			input:focus {
+				outline:none;
+}
 			#definearea {
 				cursor:pointer;
 				background:grey;
@@ -139,7 +148,7 @@
 			.leaflet-control-attribution {
 				display:none;
 			}
-			.zoomedout .leaflet-marker-icon img{
+			.zoomedout .leaflet-marker-icon *{
 				border:3px solid #666;
 				width:0px;
 				height:0px;
@@ -273,11 +282,12 @@
 
 			#detailview {
 				width:90%;
-				max-width:1500px;
+				max-width:1200px;
 				position:absolute;
 				z-index:2;
 				background:white;
 				-webkit-transform:translateY(-3000px);
+				-webkit-transition-timing-function:cubic-bezier(0,1.2,.87,1);				
 				transition:all 0.4s;
 				height:90%;
 				box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
@@ -285,14 +295,29 @@
 				left:0;
 				right:0;
 				margin:20px auto auto auto;
+				border-radius:10px;
 			}		
 
+			#close {
+				position:absolute;
+				top:0px;
+				right:0px;
+				color:#ccc;
+				font-size:1.5em;
+				padding:15px;
+				z-index:10;
+				cursor:pointer;	
+				line-height:18px;
+			}
+			#close:hover {
+				color:#666;
+			}
 			#detailtext {
 				width: 62%;
 				position:relative;
 				overflow-y: scroll;
 				overflow-x:hidden;
-				height: 92%;
+				height: 95%;
 				padding:2% 4%;
 				position:absolute;
 				right:0px;
@@ -316,25 +341,28 @@
 			#listingprice,
 			#neighborhood, 
 			#bedbath {
-				color: #57656c;
+				color: #57657c;
 				font-weight:bold;
 				font-style: normal;
+				text-transform: capitalize;
 			}
 			
 			#listingtitle {
 				font-weight:100;
 				font-size:1.7em;
+				width:80%;
 			}
 			#listingsubtitle {
 				color:#a7b5bc;
 				font-family:Georgia, serif;
 				font-style:italic;
+				margin-top:-15px;
 			}
 			#listingbody {
 				color:#666;
-				line-height: 120%;
 				font-family:Georgia, serif;
-
+				line-height: 160%;
+				margin-top:30px;
 			}
 
 			#listingbody h1,
@@ -342,7 +370,9 @@
 			#listingbody h3,
 			#listingbody b
 			{
-				color:#333;
+				color: #57657c;
+				font-family: Whitney, sans-serif;
+
 			}
 			h1 {
 				font-size:1.5em;
@@ -400,11 +430,8 @@
 			
 			
 			#bedbath {
-				text-transform: uppercase;
 			}
 			#neighborhood {
-				text-transform:capitalize;
-				font-style:bold;
 			}
 
 			#preview {
@@ -429,18 +456,18 @@
 			#gallery {
 				width:100%;
 				height:420px;
-				margin:20px 0px;
+				margin:40px 0px;
 			}
 			#mainimg {
 				width:80%;
 				height:420px;
 				display:inline-block;
-				background:#efefef;
+				background:url('assets/stripes.png');
+				overflow:hidden;
 			}
 			#galleryimg {
 			width:auto;
 			margin:0 auto;
 			height:420px;
-			max-width:100%;
 			display:block;
 			}

@@ -12,11 +12,11 @@
 	<body>
 		<div id='detailview'>
 			<div id='detailedmap'></div>
-					<div style='position:absolute;top:0px;left:0px;background:grey;color:white'>✕</div>
+					<div id='close' onclick='toggledetailview()'>✕</div>
 
 				<div id='detailtext'>
-					<p style='min-width:500px'>
-						<span id='listingtitle'></span>
+					<p style='min-width:500px' id='listingtitle'>
+
 					</p>
 					<p id='listingsubtitle'><span id='listingprice'></span> for a 
 					<span id='bedbath'></span> in <span id='neighborhood'></span> (posted <span id='dateposted'></span>)</p>
@@ -28,7 +28,6 @@
 						</div>
 					</div>
 					<p id='listingbody'></p>
-					<a onclick='toggledetailview()' class='button'>Close</a>
 					<a id='contact' class='button'>Contact</a>
 					<a id='listinglink' target='_blank' class='button'>Original listing</a>
 				</div>

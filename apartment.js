@@ -72,7 +72,15 @@
 				
 				dosearch('fitbound');
 			}
-			
+
+			//formats br/ba number
+			function brbaformat(string) {
+				return string
+						.replace(/0br/g,'studio')
+						.replace(/br/g,' bed')
+						.replace(/ba/g,' bath');
+			}
+
 			//execute search with provided parameters
 			function dosearch(target){
 				
@@ -97,14 +105,8 @@
 					var lon=array[k]['location']['long'];
 					
 					//define bedroom number
-					var bedroomquant;
-					switch (array[k]['annotations']['bedrooms']) {
-					  	case "0br":
-					  		bedroomquant='studio';
-					  		break;
-						default:
-							bedroomquant=array[k]['annotations']['bedrooms'];
-					}
+					var bedroomquant=brbaformat(array[k]['annotations']['bedrooms']);
+
 					
 					//set default picture if listing doesn't have one
 					if (array[k]['images'][0] !== undefined && array[k]['images'][0]['full'] !== undefined) {var image=array[k]['images'][0]['full']} 
@@ -121,8 +123,7 @@
 					}
 					if(target=='fitbound'){
 					//fit map view to active markers
-					map.fitBounds(markerextent);
-					}
+					map.fitBounds(markerextent);}
 				})
 			}	
 					    
@@ -217,21 +218,22 @@
 					var lat=listing['location']['lat']; 
 					var lon=listing['location']['long'];
 					var annotations=listing['annotations'];
-				//populate bed/bath, price
-				
-				$('#bedbath').html(annotations['bedrooms']+', '+listing['annotations']['bathrooms']);
-				$('#neighborhood').html(annotations['source_neighborhood']);
-				
-				//remove old marker, insert new marker, reset view on it,  and add tooltip containing intersection (via geonames API call)
-				$('#detailedmap .leaflet-marker-icon').remove();
-				var detailmarker=L.marker([lat,lon],{icon: L.divIcon({className: 'detail-marker',html: '<img src="assets/house.svg">'})})
-					.addTo(detailmap)	
-				detailmap.setView([lat,lon], 16);
-				$.ajax({ url: 'http://api.geonames.org/findNearestIntersectionJSON?lat='+lat+'&lng='+lon+'&username=peterqliu', 
-					success: function(data) { 
-						detailmarker.bindPopup('<span class="streetname">'+data['intersection']['street1']+'</span> at <span class="streetname">'+data['intersection']['street2']+'</span>',{closeButton:'false'})
-						.openPopup();
-					}
+
+					//populate bed/bath, price
+					
+					$('#bedbath').html(brbaformat(annotations['bedrooms'])+', '+brbaformat(annotations['bathrooms']) );
+					$('#neighborhood').html(annotations['source_neighborhood']);
+					
+					//remove old marker, insert new marker, reset view on it,  and add tooltip containing intersection (via geonames API call)
+					$('#detailedmap .leaflet-marker-icon').remove();
+					var detailmarker=L.marker([lat,lon],{icon: L.divIcon({className: 'detail-marker',html: '<img src="assets/house.svg">'})})
+						.addTo(detailmap)	
+					detailmap.setView([lat,lon], 16);
+					$.ajax({ url: 'http://api.geonames.org/findNearestIntersectionJSON?lat='+lat+'&lng='+lon+'&username=peterqliu', 
+						success: function(data) { 
+							detailmarker.bindPopup('<span class="streetname">'+data['intersection']['street1']+'</span> at <span class="streetname">'+data['intersection']['street2']+'</span>',{closeButton:'false'})
+							.openPopup();
+						}
 				})			
 				}
 				
