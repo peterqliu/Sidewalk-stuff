@@ -340,7 +340,9 @@
 
 			.open#detailview {
 				-webkit-transform:translateY(0px);
+				-webkit-transition-timing-function:cubic-bezier(0,1.2,1,1);				
 			}
+
 			.detail-marker img {
 				width:20px;
 				height:20px;
