@@ -15,7 +15,7 @@
 			window.longitude=-122.4156;
 			
 			//initialize main map and detail map
-			var map=L.mapbox.map('map', 'vsco.map-hd230o83', 
+			var map=L.mapbox.map('map', 'heyitsgarrett.ieig8kg4', 
 				{scrollWheelZoom: true, zoomControl:false});
 			map.on('zoomend', function() 
 				{if (map.getZoom() < 13) 
