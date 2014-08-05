@@ -75,21 +75,24 @@
 
 			//formats br/ba number
 			function brbaformat(string) {
-				return string
+				if (string.length>0)
+					{return string
 						.replace(/0br/g,'studio')
 						.replace(/br/g,' bed')
-						.replace(/ba/g,' bath');
+						.replace(/ba/g,' bath');}
+						
+				else {return ''}
 			}
 
 			//execute search with provided parameters
 			function dosearch(target){
 				
-				$('#loader').toggle();
+				$('#loader').toggleClass('closed');
 				$.get( "http://search.3taps.com", searchparameters)
 					
 					.done(function(data) {
 				console.log('done fetching');
-				$('#loader').toggle();				
+				$('#loader').toggleClass('closed');				
 				//remove current markers
 				$('#map .leaflet-marker-icon').remove();				
 				array=data.postings;
@@ -199,8 +202,10 @@
 				d3.selectAll('#preview img').remove();
 				d3.select('#galleryimg').attr('src',listing['images'][0]['full']);
 				var numpics=listing['images'].length;
+				$('#preview').hide();
 				if (numpics>1)
-					{var scaleddown=(420/numpics)-4;
+					{$('#preview').attr('style','display:inline-block');
+					var scaleddown=(420/numpics)-2;
 					
 					var columns=Math.ceil(numpics/7);
 					//$('#preview').attr('style','-webkit-column-count:'+columns);
@@ -210,7 +215,7 @@
 						.data(listing['images'])
 						.enter()
 						.append('img')
-						//.attr('style','width:'+scaleddown+'px;height:'+scaleddown+'px')
+						.attr('style','width:'+scaleddown+'px;height:'+scaleddown+'px')
 						.attr('src',function(d,i){return listing['images'][i]['full']})
 						.on('mouseover',function(d,i){$('#galleryimg').attr('src',listing['images'][i]['full'])});}
 
