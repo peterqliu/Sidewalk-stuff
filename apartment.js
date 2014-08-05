@@ -75,7 +75,7 @@
 
 			//formats br/ba number
 			function brbaformat(string) {
-				if (string.length>0)
+				if (string !==undefined)
 					{return string
 						.replace(/0br/g,'studio')
 						.replace(/br/g,' bed')
@@ -119,7 +119,7 @@
 					L.marker([lat,lon],{icon: myIcon,riseOnHover:'true'})
 							.bindPopup(k)
 							.addTo(map)
-							.on('mousedown',function(e){toggledetailview(); console.log(e); populatelisting(e['target']['_popup']['_content'])})
+							.on('mousedown',function(e){toggledetailview(); populatelisting(e['target']['_popup']['_content'])})
 							
 					//add latlon to array determining view positioning
 					markerextent[k]=[lat,lon];
@@ -146,15 +146,17 @@
 				{$.get( "http://search.3taps.com", 
 					{auth_token: "358297d537d9b89bd5b5720bbe255c65",id:id,retvals:'html,heading,timestamp,external_url,price'})
 				.done(function(data) 
-					{var html=atob(data.postings[0]['html']);
+					{
+					//isolate and format listing body
+					var html=atob(data.postings[0]['html']);
 					var postingbody=html.substring(html.lastIndexOf('<section id="postingbody">')+26,html.lastIndexOf('<ul class="notices">'));
 					postingbody=postingbody.replace(/â¢/g,'• ')
 											.replace(/(<br\s*\/?>){3,}/gi, '<br>')
-											.replace(/Â /g,'');
-					console.log(postingbody);
-					
+											.replace(/Â/g,'');
+					//console.log(postingbody);
+					console.log(data.postings);
 					var price='$'+data.postings[0]['price'];
-					var heading=data.postings[0]['heading'].replace(/price/g,'PRICEWASHERE');
+					var heading=data.postings[0]['heading'].replace(price,'PRICEWASHERE');
 					
 					$('#listingprice').text(price);
 					$('#listingtitle').html(heading);
@@ -173,6 +175,7 @@
     				});
 
 					//update Contact and Listing buttons
+					$('#contact').attr('href','https://mail.google.com/mail/u/0/?view=cm&fs=1&to='+email);					
 					$('#listinglink').attr('href',data.postings[0]['external_url']);
 	
 					}
@@ -181,8 +184,10 @@
 			//when user clicks on marker, scroll detailview to top, populates detail view with appropriate heading and body
 			function populatelisting(e)
 				{var listing=array[e];
+				$('.rewritable').html('(unknown)');
 				$('#detailtext').scrollTop(0);
-				fetchdetail(listing['id'],listing['annotations']['phone']);
+				console.log(listing['annotations']['source_account']);
+				fetchdetail(listing['id'],listing['annotations']['phone'],listing['annotations']['source_account']);
 
 				
 				
@@ -203,6 +208,7 @@
 				d3.select('#galleryimg').attr('src',listing['images'][0]['full']);
 				var numpics=listing['images'].length;
 				$('#preview').hide();
+
 				if (numpics>1)
 					{$('#preview').attr('style','display:inline-block');
 					var scaleddown=(420/numpics)-2;
@@ -223,12 +229,7 @@
 					var lat=listing['location']['lat']; 
 					var lon=listing['location']['long'];
 					var annotations=listing['annotations'];
-
-					//populate bed/bath, price
-					
-					$('#bedbath').html(brbaformat(annotations['bedrooms'])+', '+brbaformat(annotations['bathrooms']) );
-					$('#neighborhood').html(annotations['source_neighborhood']);
-					
+					console.log(annotations);
 					//remove old marker, insert new marker, reset view on it,  and add tooltip containing intersection (via geonames API call)
 					$('#detailedmap .leaflet-marker-icon').remove();
 					var detailmarker=L.marker([lat,lon],{icon: L.divIcon({className: 'detail-marker',html: '<img src="assets/house.svg">'})})
@@ -239,7 +240,12 @@
 							detailmarker.bindPopup('<span class="streetname">'+data['intersection']['street1']+'</span> at <span class="streetname">'+data['intersection']['street2']+'</span>',{closeButton:'false'})
 							.openPopup();
 						}
-				})			
+					})	
+
+					//populate bed/bath, price
+					
+					$('#bedbath').html(brbaformat(annotations['bedrooms'])+', '+brbaformat(annotations['bathrooms']) );
+					$('#neighborhood').html(annotations['source_neighborhood']);			
 				}
 				
 				

@@ -46,8 +46,8 @@
 				display:block;
 				color:grey;
 				font-size:2em;
-				-webkit-transition-timing-function:cubic-bezier(0,1.2,.87,1);				
-				transition:all 1.5s;
+				-webkit-transition-timing-function:cubic-bezier(0,1.2,.87,1);
+				transition:all 0.2s;
 			}
 			
 			
@@ -99,6 +99,9 @@
 				background:white;
 			}
 
+			.on {
+				background:#abcdef;
+			}
 			.quarter {
 				width:23%;
 				padding:10px 0px;
@@ -189,7 +192,7 @@
 				border:2px solid white;
 			}
 
-			.closed * {
+			.closed, .closed * {
 				-webkit-transform:scale(0);
 				border:none;
 				box-shadow:none;
@@ -223,8 +226,10 @@
 	
 			#listingcount {
 				position:absolute;
-				bottom:20px;
-				right:20px;
+				padding:15px 20px;
+				background:rgba(255,255,255,0.8);
+				right:0%;
+				bottom:0%;
 			}
 			#dialogmessage {
 				position:absolute;
@@ -302,7 +307,7 @@
 				z-index:2;
 				background:white;
 				-webkit-transform:translateY(-3000px);
-				-webkit-transition-timing-function:cubic-bezier(0,1.2,.87,1);				
+				-webkit-transition-timing-function:cubic-bezier(0,1.05,.87,1);				
 				transition:all 0.4s;
 				height:90%;
 				box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
@@ -310,7 +315,7 @@
 				left:0;
 				right:0;
 				margin:20px auto auto auto;
-				border-radius:10px;
+				border-radius:6px;
 			}		
 
 			#close {
@@ -319,7 +324,7 @@
 				right:0px;
 				color:#ccc;
 				font-size:1.5em;
-				padding:15px;
+				padding:20px;
 				z-index:10;
 				cursor:pointer;	
 				line-height:18px;
@@ -367,6 +372,7 @@
 				font-weight:100;
 				font-size:1.8em;
 				width:80%;
+				min-width:500px;
 			}
 			#listingsubtitle {
 				color:#a7b5bc;
@@ -384,7 +390,11 @@
 			#listingbody h1,
 			#listingbody h2,
 			#listingbody h3,
-			#listingbody b
+			#listingbody h4,
+			#listingbody h5,
+			#listingbody h6,						
+			#listingbody b,
+			#listingbody strong
 			{
 				color: #57657c;
 				font-family: Whitney, sans-serif;
@@ -440,13 +450,16 @@
 				text-align:center;
 				font-weight:100;
 				color:#666;
-
+				font-family:Georgia, serif;
+				font-style:italic;
 			}
 			
 			.streetname {
 				font-weight:400;
 				display:inline-block;
-				color:black;
+				color:#57657c;
+				font-family:Whitney, sans-serif;
+				font-style:normal;
 			}
 			
 			
