@@ -152,11 +152,12 @@
 					var postingbody=html.substring(html.lastIndexOf('<section id="postingbody">')+26,html.lastIndexOf('<ul class="notices">'));
 					postingbody=postingbody.replace(/â¢/g,'• ')
 											.replace(/(<br\s*\/?>){3,}/gi, '<br>')
-											.replace(/Â/g,'');
+											.replace(/Â/g,'')
+											.replace(/gt;/g,'>');
 					//console.log(postingbody);
 					console.log(data.postings);
 					var price='$'+data.postings[0]['price'];
-					var heading=data.postings[0]['heading'].replace(price,'PRICEWASHERE');
+					var heading=data.postings[0]['heading'].replace(price,'');
 					
 					$('#listingprice').text(price);
 					$('#listingtitle').html(heading);
