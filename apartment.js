@@ -124,6 +124,7 @@
 					//add latlon to array determining view positioning
 					markerextent[k]=[lat,lon];
 					}
+
 					if(target=='fitbound'){
 					//fit map view to active markers
 					map.fitBounds(markerextent);}
@@ -153,8 +154,9 @@
 					postingbody=postingbody.replace(/â¢/g,'• ')
 											.replace(/(<br\s*\/?>){3,}/gi, '<br>')
 											.replace(/Â/g,'')
+											.replace(/\r?\n|\r/g,'')
 											.replace(/gt;/g,'>');
-					//console.log(postingbody);
+					console.log(postingbody);
 					console.log(data.postings);
 					var price='$'+data.postings[0]['price'];
 					var heading=data.postings[0]['heading'].replace(price,'');
@@ -289,7 +291,7 @@
 
 						d3.select('#radiusdistance')
 							.attr('x',circlecenter[0])
-							.attr('y',circlecenter[1]+10)
+							.attr('y',circlecenter[1]+8)
 							.attr('font-size','1.2em')
 							.text('');		
 							
