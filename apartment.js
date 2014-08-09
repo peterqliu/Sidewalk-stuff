@@ -61,6 +61,9 @@
 					//L.marker(results['features'][0]['center']).addTo(map);
 					dosearch();
 					
+					$('path.leaflet-clickable').remove();
+					L.circle([searchparameters['lat'],searchparameters['long']], 8050).addTo(map);
+
 					})
 				};	
 			
@@ -155,7 +158,8 @@
 											.replace(/(<br\s*\/?>){3,}/gi, '<br>')
 											.replace(/Â/g,'')
 											.replace(/\r?\n|\r/g,'')
-											.replace(/gt;/g,'>');
+											.replace(/gt;/g,'>')
+											.replace(/<br>{2,}/g, '');
 					console.log(postingbody);
 					console.log(data.postings);
 					var price='$'+data.postings[0]['price'];
@@ -291,11 +295,16 @@
 
 						d3.select('#radiusdistance')
 							.attr('x',circlecenter[0])
-							.attr('y',circlecenter[1]+8)
+							.attr('y',circlecenter[1]+4)
 							.attr('font-size','1.2em')
 							.text('');		
-							
-						$('#map').mousemove(function(e)
+
+						d3.select('#miles')
+							.attr('x',circlecenter[0])
+							.attr('y',circlecenter[1]+15)
+							.attr('font-size','0.7em')
+
+							$('#map').mousemove(function(e)
 							{ if(drawing=='true' && e.which==1)
 								{var radius=Math.pow(Math.pow(e.pageX-circlecenter[0],2)+Math.pow(e.pageY-circlecenter[1],2),0.5);
 								d3.select('#outer')

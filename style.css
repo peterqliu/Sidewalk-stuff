@@ -137,17 +137,17 @@
 				color:#999;
 			}
 			.scrubber {
-				  cursor:ew-resize;
-				  -webkit-transition:all 0.2s;
-				  -webkit-user-select: none;
-				color:black;
+				cursor:ew-resize;
+				-webkit-transition:all 0.2s;
+				-webkit-user-select: none;
+				  color:#666;
 				  }
 
 			.scrubber:hover {
 				border-bottom:2px dotted grey;
 			}
 			.scrubber:active {
-				  color:orange;
+				  color:black;
 				  }
 
 			
@@ -186,7 +186,7 @@
 				display:none;
 			}
 			.zoomedout .leaflet-marker-icon *{
-				border:3px solid #666;
+				border:3px solid orange;
 				width:0px;
 				height:0px;
 				box-shadow:none;
@@ -280,7 +280,7 @@
 			}
 			
 			#drawradius {
-				stroke:grey;
+				stroke:white;
 				stroke-opacity:1;
 				stroke-width:2px;				
 			}		
@@ -292,7 +292,7 @@
 			}
 			
 			#center {
-				fill:grey;
+				fill:white;
 			}
 			#radius {
 				stroke:white;
@@ -300,8 +300,8 @@
 				stroke-width:2px;				
 			}
 
-			#radiusdistance {
-				fill:white;
+			#radiusdistance, #miles {
+				fill:#333;
 				text-anchor:middle;
 			}
 			.leaflet-popup-close-button {
@@ -310,7 +310,7 @@
 			path.leaflet-clickable {
 				fill:orange;
 				fill-opacity:0;
-				stroke:grey;
+				stroke:orange;
 				stroke-dasharray:1,10;
 				stroke-opacity:1;
 				stroke-width:3;
@@ -383,9 +383,11 @@
 				color: #57657c;
 				font-weight:bold;
 				font-style: normal;
-				text-transform: capitalize;
 			}
 			
+			#neighborhood {
+				text-transform: capitalize;
+			}
 			#listingtitle {
 				font-weight:100;
 				font-size:1.8em;
