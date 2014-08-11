@@ -154,12 +154,12 @@
 					//isolate and format listing body
 					var html=atob(data.postings[0]['html']);
 					var postingbody=html.substring(html.lastIndexOf('<section id="postingbody">')+26,html.lastIndexOf('<ul class="notices">'));
-					postingbody=postingbody.replace(/â¢/g,'• ')
-											.replace(/(<br\s*\/?>){3,}/gi, '<br>')
-											.replace(/Â/g,'')
-											.replace(/\r?\n|\r/g,'')
-											.replace(/gt;/g,'>')
-											.replace(/<br>{2,}/g, '');
+					postingbody=postingbody.replace(/â¢/g,'• ')			//get correct bullet point
+											.replace(/,(?=[^\s])/g, ", ")	//force space after comma (if none already)
+											.replace(/Â/g,'')			//delete this character
+											.replace(/\r?\n|\r/g,'')	//remove carriage returns
+											.replace(/gt;/g,'>')		//replace gt; with >
+											.replace(/<br>{2,}/g, '');	//cap br's at 2
 					console.log(postingbody);
 					console.log(data.postings);
 					var price='$'+data.postings[0]['price'];

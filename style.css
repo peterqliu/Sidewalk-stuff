@@ -49,6 +49,7 @@
 				font-size:10em;
 				-webkit-transition-timing-function:cubic-bezier(0,1.2,.87,1);
 				transition:all 0.2s;
+				-webkit-user-select:none;
 			}
 
 			#spinny {
@@ -374,7 +375,7 @@
 				margin-top:-10px;
 			}
 			.open~div {
-				-webkit-filter: blur(30px) brightness(90%);
+				-webkit-filter: blur(30px) brightness(200%);
 				pointer-events: none;
 			}
 			#listingprice,
