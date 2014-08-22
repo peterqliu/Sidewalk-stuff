@@ -15,7 +15,7 @@
 			window.longitude=-122.4156;
 			
 			//initialize main map and detail map
-			var map=L.mapbox.map('map', 'heyitsgarrett.ieig8kg4', 
+			var map=L.mapbox.map('map', 'peterqliu.3492024b', 
 				{scrollWheelZoom: true, zoomControl:false});
 			map.on('zoomend', function() 
 				{if (map.getZoom() < 13) 

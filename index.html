@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8"> 
+
+<head>
+  <script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js'></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.css' rel='stylesheet' />
+  <link href='style.css' rel='stylesheet' />
+		
+</head>
+	<body>
+		<div id='detailview'>
+			<div id='detailedmap'></div>
+					<div id='close' onclick='toggledetailview()'>✕</div>
+
+				<div id='detailtext'>
+					<p class='rewritable' id='listingtitle'>
+
+					</p>
+					<p id='listingsubtitle'>
+						<span class='rewritable' id='listingprice'></span> for a 
+						<span id='bedbath' class='rewritable'></span> in 
+						<span id='neighborhood' class='rewritable'></span>  (posted 
+						<span id='dateposted' class='rewritable'></span>)</p>
+
+					<div id='gallery'>
+						<div id='preview'></div>
+						<div id='mainimg'>
+							<img id='galleryimg'/>
+						</div>
+					</div>
+					<p id='listingbody' class='rewritable'></p>
+					<a id='contact' target='_blank' class='button'>Contact</a>
+					<a id='listinglink' target='_blank' class='button'>Original listing</a>
+				</div>
+				
+		</div>
+	    <div id='map'>
+
+	    </div>
+	    <svg id='circledraw'>
+	    	<circle id='outer'/>
+			<circle id='center' r='20'/>
+			<line id='drawradius'/>
+			<text id='radiusdistance'> Release to search</text>
+			<text id='miles'>mi</text>
+	    </svg>
+	    <div class='closed' id='loader'>
+	    	<div id='spinny'>&#9881;</div>
+	    </div>
+	    <div id='listingcount'></div>
+	    <span id='dialogmessage'>
+			<svg id='demo'>
+				<style>
+					#demo {
+						width:300px;
+						height:30px;
+					}
+					#demo #outside {
+						fill:white;
+						fill-opacity:0.3;
+						-webkit-transform-origin:50%;		
+						-webkit-animation-name: pulse;	
+					}
+					
+					#demo #radius {
+						-webkit-transform-origin:0%;	
+						-webkit-animation-name: stretcher;
+					}
+					
+					#demo #grabber {
+						-webkit-transform-origin:0% 50%;	
+						-webkit-animation-name: move;
+						fill:white;
+					}
+					#demo #outside, #demo #radius, #demo #grabber, text {
+						-webkit-animation-duration: 0.5s;
+						-webkit-animation-direction: alternate;
+						-webkit-animation-iteration-count: infinite;
+						fill:white;
+					}
+					
+					#cancel {
+						font-size:1.2em;
+						fill: orange;
+						cursor: pointer;
+					}
+					/*Person marker */
+					@-webkit-keyframes pulse {
+					  0% {
+					  -webkit-transform:scale(0.5);
+					  }
+					}
+					@-webkit-keyframes stretcher {
+					  0% {
+					  -webkit-transform:scaleX(0.5);
+					  }
+					}  
+					@-webkit-keyframes move {
+					  0% {
+					  -webkit-transform:translateX(-7px);
+					  }	  }
+				</style>
+				
+				<circle id='outside' cx='15' cy='15' r='14'/>
+				<circle id='grabber' cx='28' cy='15' r='2' />
+				<line id='radius' x1='15' y1='15' x2='28' y2='15' stroke-width='2'/>
+				<text x='40' y='21'> Click and drag to expand circle</text>
+				<text id='cancel' x='270' y='23' onclick="canceldraw()">✕</text>				
+			</svg>
+	    </span>
+		<div id='maindialog'>
+			<p class='subhead'>Location</p>
+			<div style='border:1px solid grey'>
+				<input type='text' id='locationinput' placeholder='City or ZIP' value='San Francisco' onkeydown="if (event.keyCode == 13) {inputsearch()}"/>
+				<a onclick='drawcircle()' id='definearea'>Define area</a>
+			</div>
+
+				<p class='subhead'>Rent</p>
+			<div class='right' id='rent'>	
+			<span class='scrubber' id='minrent' style=''>$200</span> ~ <span class='scrubber' id='maxrent' style=''>$3000</span>
+			</div>
+			<div style='display:none'>
+			<p class='subhead'>Bedrooms</p>
+			<a class='quarter button onoff'>Studio </a>
+			<a class='quarter button onoff'>1 </a>
+			<a class='quarter button onoff'>2 </a>
+			<a class='quarter button onoff'>3+ </a>
+
+			<p class='subhead'>Amenities</p>
+			<img src='assets/cat.svg' amenity='mustcat' class='quarter button onoff' height='30' width='30' title='Allows cats'/>
+			<img src='assets/dog.svg' class='button quarter onoff' amenity='mustdog' height='30' title='Allows dogs'/>
+			<img src='assets/hanger.svg' amenity='mustlaundry' class='button quarter onoff' height='30' width='30' title='On-site laundry'/>
+			<img src='assets/garage.svg' amenity=' AND (attached_garage:yes OR carport:yes)' class='button quarter onoff' height='30' title='Garage/carport'/>
+			</div>		
+	</div>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src='apartment.js'></script>
+
+
+
+	</body>
+</html>
