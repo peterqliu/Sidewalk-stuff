@@ -15,7 +15,7 @@
 			window.longitude=-122.4156;
 			
 			//initialize main map and detail map
-			var map=L.mapbox.map('map', 'peterqliu.3492024b', 
+			var map=L.mapbox.map('map', 'pinterest.ijz1714i', 
 				{scrollWheelZoom: true, zoomControl:false});
 			map.on('zoomend', function() 
 				{if (map.getZoom() < 13) 
@@ -37,7 +37,7 @@
 				rpp:'99',
 				retvals:'id,images,price,annotations,location,timestamp',
 				 category:"RHFR",
-				 source:'CRAIG',
+				 //source:'CRAIG',
 				 radius:'3000m',
 				 lat: latitude,
 				 long: longitude,
