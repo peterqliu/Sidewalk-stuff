@@ -38,12 +38,13 @@
     border-radius: 3px;
     background:#ccc;
 }
- 
+			body { margin:0; padding:0; }
+
 			#loader {
 				position:absolute;
 				top:50%;
 				left:50%;
-				display:block;
+				display:none;
 				color:orange;
 				opacity:0.6;
 				font-size:10em;
@@ -83,14 +84,13 @@
 				border:1px solid #ccc;
 				-webkit-transition:all 0.25s;
 				-webkit-user-select:none;
+				z-index:3;
 			}
 			#locationinput {
 				padding:8px;
-				width: 50%;
 				border: none;
 				font-size: 1.2em;
 				margin: 0px;
-				font-family:Georgia, serif;
 				outline:none;
 				text-transform:capitalize;
 			}
@@ -103,6 +103,7 @@
 				color:white;
 				padding:10px 9px;
 				float:right;
+				display:none;
 			}
 			.right {
 				text-align: end;
@@ -171,11 +172,23 @@
 			#map {
 				position:absolute;
 				width:100%;
-				height:100%;	
+				top:0; 
+				bottom:0; 
 				background:#ccc;
 				-webkit-transition:all 0.25s;
+				font:inherit;
 			}
-			.drawmode {
+
+			#markerpane {
+				position:absolute; 
+				top:0; bottom:0; 
+				width:100%;
+				pointer-events:none;
+				overflow:hidden;
+				z-index:1;
+			}
+
+			canvas.drawmode {
 				cursor:crosshair;
 			}
 
@@ -183,7 +196,7 @@
 				pointer-events:none;
 			}
 			.leaflet-map-pane {}
-			.leaflet-control-attribution {
+			.mapboxgl-ctrl-attrib {
 				display:none;
 			}
 			.zoomedout .leaflet-marker-icon *{
@@ -194,9 +207,14 @@
 			}
 			.leaflet-marker-icon {
 				padding-left:6px;
+				pointer-events:auto;
+				position:absolute;
+				cursor:pointer;
 				}
 				
-		
+			.leaflet-marker-icon:hover {
+				z-index:1;
+			}
 
 			.markertitle,
 			.leaflet-marker-icon img {
@@ -225,7 +243,8 @@
 				margin-top:-100px;
 				overflow:hidden;
 				opacity:1;
-				font-size:1.3em;
+				font-size:1em;
+				z-index:2;
 			}
 			
 		
@@ -241,7 +260,7 @@
 				opacity:1;
 				background-image:url('assets/fulltitlebg.png');
 				font-size:0em;
-				line-height:22.5em;
+				line-height:22.25em;
 			}
 	
 			#listingcount {
@@ -324,7 +343,7 @@
 				width:90%;
 				max-width:1200px;
 				position:absolute;
-				z-index:2;
+				z-index:4;
 				background:white;
 				-webkit-transform:translateY(-3000px);
 				
@@ -366,16 +385,21 @@
 			.open#detailview {
 				-webkit-transform:translateY(0px);
 			}
+			.detail-marker {
+				position:absolute;
+				z-index:2;
+				border-radius:10px;
 
-			.detail-marker img {
+			}
+img.detail-marker {
 				width:20px;
 				height:20px;
 				border:none;
 				margin-left:-10px;
 				margin-top:-10px;
-			}
+}
 			.open~div {
-				-webkit-filter: blur(30px) brightness(200%);
+				-webkit-filter: blur(30px);
 				pointer-events: none;
 			}
 			#listingprice,
@@ -454,29 +478,32 @@
 
 
 			/* Detail map */
-			#detailedmap {
+			#mappanel {
 				width:30%;
-				background:#eee;
 				height:100%;
+				background:#eee;
 				border-right:1px solid #ccc;
 				float:left;
+				font:inherit;
 			}
-			
-			#detailedmap .leaflet-popup-pane {
-				margin-top:-20px;
-			}
-			#detailedmap .leaflet-marker-icon {
-				width:20px;
-				height:20px;
-			}
-			.leaflet-popup-content {
-				font-size:1.5em;
+			#detailedmap {
+				height:100%;
+			}		
+
+			.markerlabel {
+				font-size:1.2em;
 				margin-bottom:-5px;
 				text-align:center;
 				font-weight:100;
 				color:#666;
 				font-family:Georgia, serif;
 				font-style:italic;
+				margin-top:-65px;
+				margin-left:-20px;
+				background:white;
+				padding:10px;
+				border-radius:3px;
+				box-shadow: 0 1px 2px rgba(0,0,0,.2);
 			}
 			
 			.streetname {
@@ -487,12 +514,6 @@
 				font-style:normal;
 			}
 			
-			
-			
-			#bedbath {
-			}
-			#neighborhood {
-			}
 
 			#preview {
 				display:none;

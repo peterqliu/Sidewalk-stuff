@@ -11,23 +11,28 @@
 				{type=!type};
 			
 			
-			window.latitude=37.7484;
-			window.longitude=-122.4156;
+			window.latitude=38.9;
+			window.longitude=-77;
 			
 			//initialize main map and detail map
-			var map=L.mapbox.map('map', 'pinterest.ijz1714i', 
-				{scrollWheelZoom: true, zoomControl:false});
-			map.on('zoomend', function() 
-				{if (map.getZoom() < 13) 
-					{$('#map').addClass('zoomedout')}
-				 else {$('#map').removeClass('zoomedout')}
-				});
-			new L.Control.Zoom({ position: 'topright' }).addTo(map);
+			var centermarker=[latitude, longitude];
+			mapboxgl.accessToken = 'pk.eyJ1IjoicGV0ZXJxbGl1IiwiYSI6ImpvZmV0UEEifQ._D4bRmVcGfJvo1wjuOpA1g';
+			var map = new mapboxgl.Map({
+			  container: 'map', // container id
+			  style: 'https://www.mapbox.com/mapbox-gl-styles/styles/outdoors-v4.json', //stylesheet location
+			  center: centermarker, // starting position
+			  zoom: 12, // starting zoom
+			  interactive:true
+			});
 
 
 
-			var detailmap=L.mapbox.map('detailedmap', 'heyitsgarrett.ieig8kg4', {scrollWheelZoom: true,zoomControl:false});
-			
+			var detailmap = new mapboxgl.Map({
+			  container: 'detailedmap', // container id
+			  style: 'https://www.mapbox.com/mapbox-gl-styles/styles/outdoors-v4.json', //stylesheet location
+			  center: centermarker, // starting position
+			  zoom: 12, // starting zoom
+			});			
 			
 			
 			//fetch data via 3taps
@@ -57,12 +62,11 @@
 					searchparameters['lat']=results['results'][0]['geometry']['location']['lat'];
 					searchparameters['long']=results['results'][0]['geometry']['location']['lng'];	
 					searchparameters['radius']='5mi';
-					map.setView([searchparameters['lat'],searchparameters['long']], 14);
-					//L.marker(results['features'][0]['center']).addTo(map);
+					map.flyTo([results['results'][0]['geometry']['location']['lat'],results['results'][0]['geometry']['location']['lng']], 14,0,{speed:1,curve:4});
 					dosearch();
 					
 					$('path.leaflet-clickable').remove();
-					L.circle([searchparameters['lat'],searchparameters['long']], 8050).addTo(map);
+					//L.circle([searchparameters['lat'],searchparameters['long']], 8050).addTo(map);
 
 					})
 				};	
@@ -97,7 +101,7 @@
 				console.log('done fetching');
 				$('#loader').toggleClass('closed');				
 				//remove current markers
-				$('#map .leaflet-marker-icon').remove();				
+				$('.leaflet-marker-icon').remove();				
 				array=data.postings;
 				
 				$('#listingcount').text(array.length+' listings found');
@@ -113,29 +117,39 @@
 					//define bedroom number
 					var bedroomquant=brbaformat(array[k]['annotations']['bedrooms']);
 
+
+
+
+
 					
 					//set default picture if listing doesn't have one
 					if (array[k]['images'][0] !== undefined && array[k]['images'][0]['full'] !== undefined) {var image=array[k]['images'][0]['full']} 
 					else {var image= 'http://www.peterma.de/secretrio/assets/selfie1.jpg'};
 						
-					var myIcon=L.divIcon({className: 'leaflet-marker-icon closed',html: '<div class="markertitle">'+bedroomquant+' • $'+array[k]['price']+'</div><img onload="openmarker(this)" class="" src="'+image+'">'});		
-					L.marker([lat,lon],{icon: myIcon,riseOnHover:'true'})
-							.bindPopup(k)
-							.addTo(map)
-							.on('mousedown',function(e){toggledetailview(); populatelisting(e['target']['_popup']['_content'])})
-							
-					//add latlon to array determining view positioning
-					markerextent[k]=[lat,lon];
-					}
 
-					if(target=='fitbound'){
-					//fit map view to active markers
-					map.fitBounds(markerextent);}
+
+					$('#markerpane').append('<div class="leaflet-marker-icon closed" index="'+k+'" lat="'+lat+'" lon="'+lon+'""><div class="markertitle">'+bedroomquant+' • $'+array[k]['price']+'</div><img onload="openmarker(this)" class="" src="'+image+'"></div>')								
+					}
+					$('.leaflet-marker-icon').on('mousedown',function(){toggledetailview(); populatelisting(this)})
+					trackmarkers('map','leaflet-marker-icon');
+
+
+					map.on('move', function(){trackmarkers('map','leaflet-marker-icon')});
 				})
 			}	
 					    
 			inputsearch();
-			
+			function trackmarkers(mapidentifier,markers)
+				{$('.'+markers)
+					.each(function(index)
+						{	var xpos=$(this).attr('lat');
+							var ypos=$(this).attr('lon');
+							var x=eval(mapidentifier).project([xpos,ypos])['x'];
+							var y=eval(mapidentifier).project([xpos,ypos])['y'];
+							$(this).css('-webkit-transform','translate('+x+'px, '+y+'px)');
+						}
+					)
+				}			
 			//pop open markers when their respective images load
 			function openmarker(target)
 				{$(target).parent().toggleClass('closed')};
@@ -189,8 +203,10 @@
 				)};
 			
 			//when user clicks on marker, scroll detailview to top, populates detail view with appropriate heading and body
-			function populatelisting(e)
-				{var listing=array[e];
+			function populatelisting(target)
+				{	var num=$(target).attr('index');
+					var listing=array[num];
+					console.log(num);
 				$('.rewritable').html('(unknown)');
 				$('#detailtext').scrollTop(0);
 				console.log(listing['annotations']['source_account']);
@@ -239,13 +255,17 @@
 					console.log(annotations);
 					//remove old marker, insert new marker, reset view on it,  and add tooltip containing intersection (via geonames API call)
 					$('#detailedmap .leaflet-marker-icon').remove();
-					var detailmarker=L.marker([lat,lon],{icon: L.divIcon({className: 'detail-marker',html: '<img src="assets/house.svg">'})})
-						.addTo(detailmap)	
-					detailmap.setView([lat,lon], 16);
+		
+					detailmap.setView([lat,lon], 16,0);
+					$('.detail-marker').attr('lat',lat).attr('lon',lon);
+					trackmarkers('detailmap','detail-marker');
+					detailmap.on('move', function(){trackmarkers('detailmap','detail-marker')});
+
 					$.ajax({ url: 'http://api.geonames.org/findNearestIntersectionJSON?lat='+lat+'&lng='+lon+'&username=peterqliu', 
 						success: function(data) { 
-							detailmarker.bindPopup('<span class="streetname">'+data['intersection']['street1']+'</span> at <span class="streetname">'+data['intersection']['street2']+'</span>',{closeButton:'false'})
-							.openPopup();
+							$('.markerlabel')
+								.html('<div style="padding:2px"><span class="streetname">'+data['intersection']['street1']+'</span> at <span class="streetname">'+data['intersection']['street2']+'</span></div>')
+								.css('margin-left',$('.markerlabel').width()*-0.5+'px');
 						}
 					})	
 
@@ -260,21 +280,22 @@
 
 			function drawcircle()
 				{drawing='true';
-				$('#map').toggleClass('drawmode');
+				$('canvas').toggleClass('drawmode');
 					//remove existing circles
-					$('path.leaflet-clickable').remove();
+					//$('path.leaflet-clickable').remove();
 					
 					//temporarily disable map drag
-					map.dragging.disable();
+					map.options.interactive=false;
 					
 					map.on('mousedown', function(e) {
-						//console.log(e.containerPoint.toString() + ', ' + e.latlng.toString());	
-						window.centerlatlon=[e.latlng.lat,e.latlng.lng];
+						console.log('down');
+
+						window.centerlatlon=[map.unproject(e.point).lat, map.unproject(e.point).lng];
 						map.on('mousemove',function(e)
-							{var mileradius= 0.000621371*(L.latLng(centerlatlon[0],centerlatlon[1]).distanceTo([e.latlng.lat,e.latlng.lng]));
+							{var mileradius= 0.000621371*(L.latLng(centerlatlon[0],centerlatlon[1]).distanceTo([map.unproject(e.point).lat, map.unproject(e.point).lng]));
 								d3.select('#radiusdistance')
 									.text(Math.round(mileradius*10)/10+'');
-						});			
+							});			
 					});		
 							
 					$('#map').mousedown(function(e)
@@ -306,7 +327,7 @@
 
 							$('#map').mousemove(function(e)
 							{ if(drawing=='true' && e.which==1)
-								{var radius=Math.pow(Math.pow(e.pageX-circlecenter[0],2)+Math.pow(e.pageY-circlecenter[1],2),0.5);
+								{var radius=Math.pow(Math.pow(e.pageX-circlecenter[0],2)+Math.pow(e.pageY-circlecenter[1],2), 0.5);
 								d3.select('#outer')
 									.attr('r', radius)
 									.attr('fill-opacity',Math.pow(0.9,(radius*0.1)));
@@ -325,8 +346,8 @@
 						})
 						map.on('mouseup',function(e){if (drawing=='true')
 								{canceldraw();
-								var meterradius= L.latLng(centerlatlon[0],centerlatlon[1]).distanceTo([e.latlng.lat,e.latlng.lng]);
-								L.circle(centerlatlon, meterradius).addTo(map);
+								var meterradius= L.latLng(centerlatlon[0],centerlatlon[1]).distanceTo([map.unproject(e.point).lat, map.unproject(e.point).lng]);
+								//L.circle(centerlatlon, meterradius).addTo(map);
 								circlesearch(centerlatlon[0],centerlatlon[1],meterradius);
 								}
 								drawing='false';
@@ -334,7 +355,7 @@
 				}		
 			function canceldraw(){
 				$('#map').toggleClass('drawmode');
-				map.dragging.enable();
+				map.options.interactive=true;
 				$('#circledraw').hide();
 				$('#map').unbind('mousedown');
 				$('#map').unbind('mousemove');
